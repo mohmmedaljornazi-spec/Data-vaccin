@@ -856,6 +856,38 @@ firebase.initializeApp({
 });
 const db = firebase.database();
 
+// ===== NOTIFICATIONS: تظهر على اللابتوب والتطبيق عند رفع ملف جديد =====
+let notifReady = false;
+async function requestNotifPermission(){
+  if(!('Notification' in window)) return;
+  if(Notification.permission === 'default'){
+    try{ await Notification.requestPermission(); }catch(e){}
+  }
+}
+function showLocalNotif(title, body){
+  if(!('Notification' in window) || Notification.permission !== 'granted') return;
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.ready.then(reg=>{
+      if(reg.active){
+        reg.active.postMessage({type:'SHOW_NOTIFICATION', title, body});
+      }else{
+        reg.showNotification(title,{body,icon:'./icons/icon-192.png',badge:'./icons/icon-72.png',dir:'rtl',lang:'ar',tag:'tatveem-update',renotify:true});
+      }
+    }).catch(()=>new Notification(title,{body,icon:'./icons/icon-192.png',dir:'rtl',lang:'ar'}));
+  }else{
+    new Notification(title,{body,icon:'./icons/icon-192.png',dir:'rtl',lang:'ar'});
+  }
+}
+
+db.ref('tatveem/notification').on('value', snap=>{
+  const n=snap.val();
+  if(!n) return;
+  if(!notifReady){ notifReady=true; return; }
+  toast('🔔 '+(n.body||'تم رفع بيانات جديدة'));
+  showLocalNotif(n.title||'💉 تحديث جديد — لوحة التطعيم', n.body||'تم رفع بيانات جديدة');
+});
+window.addEventListener('load',()=>setTimeout(requestNotifPermission,1200));
+
 db.ref('.info/connected').on('value', snap=>{
   if(snap.val()){
     document.getElementById('livePill').style.display='flex';
@@ -1155,6 +1187,13 @@ function procFile2(file){
         municipalities:D2.municipalities.length,
         uploadedBy:'المدير'
       }).then(()=>{
+        db.ref('tatveem/notification').set({
+          title:'💉 تحديث جديد — لوحة التطعيم',
+          body:'رُفع ملف: '+file.name+' · '+t,
+          time:t,
+          ts:Date.now(),
+          source:'desktop'
+        }).catch(()=>{});
         document.getElementById('upBar2').style.width='100%';
         document.getElementById('upLbl2').textContent='✅ تم!';
         setTimeout(()=>{document.getElementById('upProg2').style.display='none';},1200);

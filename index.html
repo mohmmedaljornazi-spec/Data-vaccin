@@ -98,10 +98,15 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
 /* LAST UPDATE */
 .last-update{text-align:center;font-size:10px;color:var(--tx3);padding:8px 0}
 /* INSTALL */
-#installBanner{display:none;background:var(--navy);color:#e8f5e9;padding:10px 14px;align-items:center;gap:9px;border-top:1px solid rgba(29,158,117,.3);flex-shrink:0}
-#installBanner .i-title{font-size:12px;font-weight:600;flex:1}
-#installBanner .i-sub{font-size:10px;color:rgba(255,255,255,.4)}
-.i-btn{background:var(--g);color:#fff;border:none;border-radius:16px;padding:7px 16px;font-size:12px;cursor:pointer;font-weight:600;flex-shrink:0}
+#installBanner{display:none;position:fixed;left:10px;right:10px;bottom:10px;background:linear-gradient(135deg,var(--navy),#12382f);color:#e8f5e9;padding:12px 14px;align-items:center;gap:10px;border:1px solid rgba(29,158,117,.45);border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.32);z-index:99999}
+#installBanner .i-title{font-size:13px;font-weight:700;flex:1}
+#installBanner .i-sub{font-size:10px;color:rgba(255,255,255,.58);margin-top:2px;line-height:1.5}
+.i-btn{background:var(--g);color:#fff;border:none;border-radius:18px;padding:8px 18px;font-size:12px;cursor:pointer;font-weight:700;flex-shrink:0}
+#iosInstallHelp{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100000;align-items:center;justify-content:center;padding:16px}
+#iosInstallHelp .box{background:var(--card);color:var(--tx);border:1px solid var(--bd2);border-radius:18px;padding:18px;max-width:360px;width:100%;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+#iosInstallHelp h3{font-size:16px;margin-bottom:10px;color:var(--g)}
+#iosInstallHelp p{font-size:13px;line-height:1.8;color:var(--tx2);margin-bottom:8px}
+#iosInstallHelp button{background:var(--g);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-size:13px;font-weight:700;width:100%;margin-top:8px}
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 </style>
@@ -204,9 +209,21 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
 
   <!-- INSTALL BANNER -->
   <div id="installBanner">
-    <div><div class="i-title">💉 ثبّت التطبيق</div><div class="i-sub">أضفه للشاشة الرئيسية</div></div>
-    <button class="i-btn" onclick="installApp()">تثبيت</button>
-    <button onclick="document.getElementById('installBanner').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:18px;cursor:pointer">✕</button>
+    <div style="font-size:24px;line-height:1">📲</div>
+    <div style="flex:1"><div class="i-title" id="installTitle">ثبّت التطبيق على الهاتف</div><div class="i-sub" id="installSub">أضفه للشاشة الرئيسية ليعمل كتطبيق مستقل</div></div>
+    <button class="i-btn" id="installBtn" onclick="installApp()">تثبيت</button>
+    <button onclick="hideInstallBanner()" style="background:none;border:none;color:rgba(255,255,255,.55);font-size:20px;cursor:pointer">✕</button>
+  </div>
+</div>
+
+<div id="iosInstallHelp" onclick="if(event.target.id==='iosInstallHelp')this.style.display='none'">
+  <div class="box">
+    <h3>حفظ التطبيق على iPhone</h3>
+    <p>1) افتح الرابط من متصفح <b>Safari</b>.</p>
+    <p>2) اضغط زر المشاركة <b>Share</b> ⎙.</p>
+    <p>3) اختر <b>Add to Home Screen / إضافة إلى الشاشة الرئيسية</b>.</p>
+    <p>4) اضغط <b>Add / إضافة</b>.</p>
+    <button onclick="document.getElementById('iosInstallHelp').style.display='none'">فهمت</button>
   </div>
 </div>
 
@@ -226,13 +243,12 @@ const db=firebase.database();
 // LISTEN FOR DATA - updates automatically when employee uploads
 
 // Listen for notifications from upload page
+let mobileNotifReady=false;
 db.ref('tatveem/notification').on('value', snap => {
   const val = snap.val();
   if (!val) return;
-  // Only notify if app was already loaded (not first time)
-  if (D !== null) {
-    showLocalNotif(val.title || '💉 تحديث جديد', val.body || 'تم رفع بيانات جديدة');
-  }
+  if(!mobileNotifReady){ mobileNotifReady=true; return; }
+  showLocalNotif(val.title || '💉 تحديث جديد', val.body || 'تم رفع بيانات جديدة');
 });
 
 db.ref('tatveem/latest').on('value',snap=>{
@@ -373,17 +389,60 @@ function renderData(){
 function exDate(n){const d=new Date((n-25569)*86400*1000);return`${d.getDate()}/${d.getMonth()+1}`}
 
 // PWA INSTALL
-let deferredPrompt;
+let deferredPrompt=null;
+const ua=navigator.userAgent||'';
+const isIOS=/iphone|ipad|ipod/i.test(ua);
+const isAndroid=/android/i.test(ua);
+const isStandalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+function showInstallBanner(){
+  if(isStandalone || localStorage.getItem('installBannerClosed')==='1') return;
+  const b=document.getElementById('installBanner');
+  const btn=document.getElementById('installBtn');
+  const sub=document.getElementById('installSub');
+  if(!b) return;
+  if(isIOS){
+    btn.textContent='طريقة الحفظ';
+    sub.textContent='على iPhone: Safari ← مشاركة ← إضافة إلى الشاشة الرئيسية';
+  }else if(isAndroid){
+    btn.textContent=deferredPrompt?'تثبيت':'طريقة التثبيت';
+    sub.textContent='على Android: اضغط تثبيت أو من قائمة Chrome اختر Add to Home screen';
+  }else{
+    btn.textContent=deferredPrompt?'تثبيت':'طريقة التثبيت';
+    sub.textContent='يمكن تثبيته من Chrome/Edge كتطبيق مستقل';
+  }
+  b.style.display='flex';
+}
+function hideInstallBanner(){
+  document.getElementById('installBanner').style.display='none';
+  localStorage.setItem('installBannerClosed','1');
+}
 window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();deferredPrompt=e;
-  document.getElementById('installBanner').style.display='flex';
+  e.preventDefault();
+  deferredPrompt=e;
+  showInstallBanner();
+});
+window.addEventListener('appinstalled',()=>{
+  deferredPrompt=null;
+  localStorage.setItem('installBannerClosed','1');
+  document.getElementById('installBanner').style.display='none';
 });
 function installApp(){
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{
-    deferredPrompt=null;document.getElementById('installBanner').style.display='none';
-  });}
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(()=>{
+      deferredPrompt=null;
+      document.getElementById('installBanner').style.display='none';
+    });
+    return;
+  }
+  if(isIOS){
+    document.getElementById('iosInstallHelp').style.display='flex';
+    return;
+  }
+  alert('للتثبيت على Android: افتح الرابط في Chrome، اضغط ⋮ ثم اختر Add to Home screen أو Install app.');
 }
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+setTimeout(showInstallBanner,1200);
 
 // ===== NOTIFICATIONS =====
 async function requestNotifPermission() {
@@ -403,7 +462,7 @@ function showLocalNotif(title, body) {
       });
     });
   } else {
-    new Notification(title, { body, icon: '/icons/icon-192.png', dir: 'rtl', lang: 'ar' });
+    new Notification(title, { body, icon: './icons/icon-192.png', dir: 'rtl', lang: 'ar' });
   }
 }
 

@@ -173,7 +173,9 @@ function procFile(file){
           fbDb.ref('tatveem/notification').set({
             title:'💉 تحديث جديد — لوحة التطعيم',
             body:'رُفع ملف: ' + file.name + ' · ' + t,
-            time: t
+            time: t,
+            ts: Date.now(),
+            source: 'upload'
           });
           // save to history
           const h={name:file.name,time:t,mun:D.municipalities.length};
