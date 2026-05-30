@@ -154,6 +154,7 @@ function procFile(file){
       setP(30,'جاري تحليل البيانات...');
       const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
       const D=parseWb(wb);
+      const fileBase64=arrayToBase64(e.target.result);
       setP(60,'جاري الإرسال للمدير...');
       const t=nowT();
       const activeMonth=D.monthStats.findIndex(m=>m.received>0);
@@ -164,6 +165,8 @@ function procFile(file){
           uploadTime:t,
           activeMonth:activeMonth>=0?activeMonth:0,
           fileName:file.name,
+          fileBase64:fileBase64,
+          fileSize:file.size,
           municipalities:D.municipalities.length,
           activeMonths,
           uploadedBy:'موظف'
@@ -240,6 +243,16 @@ function loadHistory(){
         <div class="hist-time">${i.time}</div>
       </div>`).join('');
   });
+}
+
+function arrayToBase64(buf){
+  const bytes=new Uint8Array(buf);
+  let binary='';
+  const chunk=8192;
+  for(let i=0;i<bytes.length;i+=chunk){
+    binary+=String.fromCharCode(...bytes.subarray(i,Math.min(i+chunk,bytes.length)));
+  }
+  return btoa(binary);
 }
 
 function parseWb(wb){
