@@ -157,6 +157,21 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
 /* TOAST */
 .toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#052e16;color:#bbf7d0;border:1px solid rgba(29,158,117,.35);border-radius:12px;padding:10px 16px;font-weight:700;z-index:80;box-shadow:0 8px 30px rgba(0,0,0,.28);min-width:200px;text-align:center;font-size:13px}
 .toast.bad{background:#450a0a;color:#fecaca;border-color:rgba(239,68,68,.35)}
+
+  /* FIXED INSTALL BUTTON */
+  #fixedInstallBtn{
+    position:fixed;bottom:0;left:0;right:0;
+    background:linear-gradient(135deg,#1d9e75,#0f6e56);
+    color:#fff;border:none;padding:16px;font-size:15px;font-weight:700;
+    cursor:pointer;z-index:999;display:none;
+    align-items:center;justify-content:center;gap:10px;
+    box-shadow:0 -4px 20px rgba(29,158,117,.4);
+    font-family:'Segoe UI',Tahoma,Arial,sans-serif;
+    letter-spacing:.3px;
+  }
+  #fixedInstallBtn.show{display:flex}
+  #fixedInstallBtn .fi-arrow{font-size:20px;animation:bounce 1.2s infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 </style>
 </head>
 <body>
@@ -335,6 +350,12 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
     </div>
 
   </div><!-- end content -->
+
+  <!-- FIXED INSTALL BUTTON -->
+  <button id="fixedInstallBtn" onclick="doInstall()">
+    <span class="fi-arrow">📲</span>
+    <span>اضغط هنا لتثبيت التطبيق على هاتفك</span>
+  </button>
 </div>
 
 <script>
@@ -401,29 +422,45 @@ const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
 function setupInstall() {
-  if (isStandalone) return;
+  if (isStandalone) return; // مثبّت بالفعل
+
   if (isIOS) {
-    setTimeout(() => document.getElementById('iosHint').classList.add('show'), 1500);
+    setTimeout(() => document.getElementById('iosHint').classList.add('show'), 1000);
     return;
   }
+
+  // Android: أظهر الزر الثابت فوراً
+  const fixedBtn = document.getElementById('fixedInstallBtn');
+  if (fixedBtn) fixedBtn.classList.add('show');
+
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault();
     deferredInstallPrompt = e;
-    document.getElementById('installBanner').classList.add('show');
+    // الزر موجود بالفعل، لا حاجة لإظهار البانر
   });
+
   window.addEventListener('appinstalled', () => {
+    if (fixedBtn) fixedBtn.classList.remove('show');
     document.getElementById('installBanner').classList.remove('show');
     deferredInstallPrompt = null;
-    showToast('✅ تم تثبيت التطبيق بنجاح');
+    showToast('✅ تم تثبيت التطبيق بنجاح 🎉');
   });
 }
 
 async function doInstall() {
-  if (!deferredInstallPrompt) { showToast('افتح الصفحة من Chrome', true); return; }
+  if (!deferredInstallPrompt) {
+    // Chrome لم يحضّر الـ prompt بعد — أرشد المستخدم
+    showToast('افتح قائمة Chrome ⋮ ← "إضافة إلى الشاشة الرئيسية"', false);
+    return;
+  }
   deferredInstallPrompt.prompt();
-  await deferredInstallPrompt.userChoice;
+  const result = await deferredInstallPrompt.userChoice;
   deferredInstallPrompt = null;
   document.getElementById('installBanner').classList.remove('show');
+  if (result.outcome === 'accepted') {
+    document.getElementById('fixedInstallBtn')?.classList.remove('show');
+    showToast('✅ جاري تثبيت التطبيق...');
+  }
 }
 
 function hideInstall() {
