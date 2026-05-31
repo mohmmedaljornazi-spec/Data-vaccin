@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -172,6 +173,29 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
   #fixedInstallBtn.show{display:flex}
   #fixedInstallBtn .fi-arrow{font-size:20px;animation:bounce 1.2s infinite}
   @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+  /* INSTALL GUIDE OVERLAY */
+  #installGuide{
+    position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;
+    display:none;align-items:flex-end;justify-content:center;padding:0
+  }
+  #installGuide.show{display:flex}
+  .ig-sheet{
+    background:#1e293b;border-radius:24px 24px 0 0;
+    padding:20px 20px 32px;width:100%;max-width:430px;
+    border-top:3px solid #1d9e75;
+  }
+  .ig-title{font-size:16px;font-weight:700;color:#e8f5e9;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .ig-sub{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:18px}
+  .ig-step{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.06);border-radius:12px;margin-bottom:10px}
+  .ig-num{width:28px;height:28px;border-radius:50%;background:#1d9e75;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ig-txt{font-size:13px;color:#f1f5f9;line-height:1.5}
+  .ig-txt b{color:#4ade80}
+  .ig-img{font-size:22px;margin-left:auto;flex-shrink:0}
+  .ig-close{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px;color:#94a3b8;font-size:13px;cursor:pointer;margin-top:6px;font-family:inherit}
+  .ig-arrow{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);font-size:32px;animation:bounce2 1s infinite;z-index:10000;pointer-events:none;display:none}
+  .ig-arrow.show{display:block}
+  @keyframes bounce2{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
 </style>
 </head>
 <body>
@@ -351,10 +375,40 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
 
   </div><!-- end content -->
 
+
+  <!-- INSTALL GUIDE -->
+  <div id="installGuide" onclick="if(event.target.id==='installGuide')closeGuide()">
+    <div class="ig-sheet">
+      <div class="ig-title">📲 تثبيت التطبيق</div>
+      <div class="ig-sub">اتبع هذه الخطوات البسيطة</div>
+
+      <div class="ig-step">
+        <div class="ig-num">1</div>
+        <div class="ig-txt">اضغط على أيقونة <b>النقاط الثلاث ⋮</b> في أعلى يمين Chrome</div>
+        <div class="ig-img">⋮</div>
+      </div>
+
+      <div class="ig-step">
+        <div class="ig-num">2</div>
+        <div class="ig-txt">اختر <b>"إضافة إلى الشاشة الرئيسية"</b> أو <b>"Install app"</b></div>
+        <div class="ig-img">📱</div>
+      </div>
+
+      <div class="ig-step">
+        <div class="ig-num">3</div>
+        <div class="ig-txt">اضغط <b>"إضافة"</b> في النافذة التي تظهر</div>
+        <div class="ig-img">✅</div>
+      </div>
+
+      <button class="ig-close" onclick="closeGuide()">إغلاق</button>
+    </div>
+  </div>
+  <div class="ig-arrow" id="igArrow">👆</div>
+
   <!-- FIXED INSTALL BUTTON -->
   <button id="fixedInstallBtn" onclick="doInstall()">
     <span class="fi-arrow">📲</span>
-    <span>اضغط هنا لتثبيت التطبيق على هاتفك</span>
+    <span>تثبيت التطبيق على الهاتف</span>
   </button>
 </div>
 
@@ -448,15 +502,10 @@ function setupInstall() {
 }
 
 async function doInstall() {
-  if (!deferredInstallPrompt) {
-    // Chrome لم يحضّر الـ prompt بعد — أرشد المستخدم
-    showToast('افتح قائمة Chrome ⋮ ← "إضافة إلى الشاشة الرئيسية"', false);
-    return;
-  }
+  if (!deferredInstallPrompt) return;
   deferredInstallPrompt.prompt();
   const result = await deferredInstallPrompt.userChoice;
   deferredInstallPrompt = null;
-  document.getElementById('installBanner').classList.remove('show');
   if (result.outcome === 'accepted') {
     document.getElementById('fixedInstallBtn')?.classList.remove('show');
     showToast('✅ جاري تثبيت التطبيق...');
@@ -537,7 +586,7 @@ if ('serviceWorker' in navigator) {
 
 // ── SERVICE WORKER ──
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js', { scope: './' })
+  navigator.serviceWorker.register('./sw.js', { scope: '/Data-vaccin/' })
     .then(() => console.log('[PWA] SW registered'))
     .catch(e => console.warn('[PWA] SW:', e));
 }
