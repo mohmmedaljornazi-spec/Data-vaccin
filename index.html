@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -431,6 +432,7 @@ function renderAll(){renderDash();renderMissing();renderTracking();renderHeatmap
 // ════════════════════════════════════════════
 // renderDash — مع نسبة التزامن
 // ════════════════════════════════════════════
+
 function renderDash(){
   if(!D)return;
   const s=D.monthStats[activeMonth];
@@ -439,13 +441,17 @@ function renderDash(){
   document.getElementById('kM').textContent=s.notReceived;
   document.getElementById('kP').textContent=(s.rate*100).toFixed(1)+'%';
 
-  // ✅ بطاقة التزامن الكبيرة
+  // ✅ بطاقة التزامن الكبيرة حسب الشهر المختار
   const hero=document.getElementById('syncHero');
-  if(D.syncRateMonthly!=null){
+  const currentSync = D.monthSyncStats?.[activeMonth];
+  if(currentSync){
     hero.style.display='flex';
-    document.getElementById('syncHeroVal').textContent=(D.syncRateMonthly*100).toFixed(1)+'%';
-    document.getElementById('syncHeroCount').textContent=D.syncCountMonthly!=null?D.syncCountMonthly:'—';
-    document.getElementById('syncHeroAnnual').textContent=D.syncRateAnnual!=null?(D.syncRateAnnual*100).toFixed(1)+'%':'—';
+    document.getElementById('syncHeroVal').textContent =
+      ((currentSync.syncRate || 0) * 100).toFixed(1) + '%';
+    document.getElementById('syncHeroCount').textContent =
+      currentSync.syncCount != null ? currentSync.syncCount : '—';
+    document.getElementById('syncHeroAnnual').textContent =
+      D.syncRateAnnual != null ? (D.syncRateAnnual * 100).toFixed(1) + '%' : '—';
   }else{
     hero.style.display='none';
   }
@@ -464,7 +470,7 @@ function renderDash(){
   const ms=D.monthSyncStats||[];
   if(ms.length>0){
     document.getElementById('syncBars').innerHTML=MONTHS.map((mn,i)=>{
-      const row=ms.find(r=>r.month===mn)||{syncRate:0,syncCount:0};
+      const row=ms[i]||{syncRate:0,syncCount:0};
       const pct=Math.round((row.syncRate||0)*100);
       const cls=pct>=70?'g':pct>=30?'cy':'r';
       const isA=i===activeMonth;
@@ -473,10 +479,8 @@ function renderDash(){
         <div class="bar-track"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
         <div class="bar-val">${pct}%</div></div>`;
     }).join('');
-  }else if(D.syncRateMonthly!=null){
-    document.getElementById('syncBars').innerHTML=`<div style="padding:12px;text-align:center;font-size:12px;color:#0891b2;font-weight:600">🔄 ${(D.syncRateMonthly*100).toFixed(1)}%</div>`;
   }else{
-    document.getElementById('syncBars').innerHTML=`<div style="padding:12px;text-align:center;font-size:11px;color:var(--tx3)">لا توجد بيانات تزامن</div>`;
+    document.getElementById('syncBars').innerHTML=`<div style="padding:12px;text-align:center;font-size:12px;color:#0891b2;font-weight:600">🔄 0%</div>`;
   }
 
   // شريط التكامل
@@ -488,6 +492,7 @@ function renderDash(){
       <div class="bar-val">${pct}%</div></div>`;
   }).join('');
 }
+
 
 function renderMissing(){
   if(!D)return;
