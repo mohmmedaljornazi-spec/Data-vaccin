@@ -12,19 +12,16 @@
 :root{--g:#1d9e75;--g2:#0f6e56;--gbg:#e1f5ee;--gbd:#9fe1cb;--r:#e24b4a;--rbg:#fcebeb;--am:#ba7517;--ambg:#faeeda;--ambd:#fac775;--navy:#0f172a;--bg:#f0fdf4;--card:#fff;--surf:#f1f5f9;--tx:#0f172a;--tx2:#64748b;--tx3:#94a3b8;--bd:rgba(0,0,0,0.08)}
 html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx)}
 .wrap{max-width:480px;margin:0 auto;padding:20px 16px}
-/* HEADER */
 .header{text-align:center;padding:24px 0 20px}
 .header-icon{width:64px;height:64px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
 .header-title{font-size:20px;font-weight:600;color:var(--navy);margin-bottom:4px}
 .header-sub{font-size:13px;color:var(--tx2)}
-/* STATUS */
 .status-bar{display:flex;align-items:center;justify-content:center;gap:7px;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;margin-bottom:18px;width:fit-content;margin-left:auto;margin-right:auto}
 .status-bar.ok{background:var(--gbg);color:var(--g2);border:1px solid var(--gbd)}
 .status-bar.err{background:var(--rbg);color:#7f1d1d;border:1px solid #fca5a5}
 .status-bar.wait{background:var(--ambg);color:#633806;border:1px solid var(--ambd)}
 .dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:blink 1.5s infinite;display:inline-block}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-/* UPLOAD ZONE */
 .drop-zone{border:2px dashed var(--gbd);border-radius:16px;padding:36px 20px;text-align:center;background:var(--card);cursor:pointer;transition:all .2s;margin-bottom:14px;box-shadow:0 2px 8px rgba(29,158,117,.08)}
 .drop-zone:hover,.drop-zone.drag{border-color:var(--g);background:rgba(29,158,117,.04)}
 .dz-icon{font-size:44px;margin-bottom:10px}
@@ -32,34 +29,31 @@ html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;backgr
 .dz-sub{font-size:12px;color:var(--tx2);margin-bottom:14px}
 .dz-btn{background:var(--g);color:#fff;border:none;border-radius:24px;padding:11px 28px;font-size:14px;cursor:pointer;font-weight:600;box-shadow:0 3px 10px rgba(29,158,117,.3)}
 .dz-btn:active{transform:scale(.97)}
-/* PROGRESS */
-.progress-card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:14px;display:none;border:1px solid var(--gbd);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.progress-card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:14px;display:none;border:1px solid var(--gbd)}
 .prog-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px}
 .prog-track{background:#e2e8f0;border-radius:6px;height:8px;overflow:hidden;margin-bottom:6px}
 .prog-fill{height:100%;background:var(--g);border-radius:6px;transition:width .4s ease}
-.prog-detail{font-size:11px;color:var(--tx2)}
-/* SUCCESS */
-.success-card{background:var(--card);border:1.5px solid var(--gbd);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;display:none;box-shadow:0 4px 14px rgba(29,158,117,.12)}
+.success-card{background:var(--card);border:1.5px solid var(--gbd);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;display:none}
 .success-icon{font-size:44px;margin-bottom:10px}
 .success-title{font-size:16px;font-weight:600;color:var(--g2);margin-bottom:5px}
 .success-sub{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:14px}
 .success-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gbg);font-size:12px}
 .success-row:last-child{border-bottom:none}
-.success-lbl{color:var(--tx2)}
-.success-val{color:var(--navy);font-weight:500}
-/* HISTORY */
-.history-card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:14px;border:1px solid var(--bd);box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.history-title{font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.success-lbl{color:var(--tx2)}.success-val{color:var(--navy);font-weight:500}
+/* بطاقة نسبة التزامن */
+.sync-card{background:linear-gradient(135deg,rgba(8,145,178,.1),rgba(8,145,178,.05));border:1px solid rgba(8,145,178,.3);border-radius:12px;padding:14px;margin:12px 0;text-align:center}
+.sync-card-lbl{font-size:11px;color:#0e7490;margin-bottom:4px;font-weight:600}
+.sync-card-val{font-size:32px;font-weight:800;color:#0891b2}
+.sync-card-sub{font-size:11px;color:#64748b;margin-top:4px}
+.history-card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:14px;border:1px solid var(--bd)}
+.history-title{font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:10px}
 .hist-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--surf);font-size:12px}
 .hist-item:last-child{border-bottom:none}
 .hist-dot{width:8px;height:8px;border-radius:50%;background:var(--g);flex-shrink:0}
-.hist-name{flex:1;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hist-time{color:var(--tx3);font-size:11px;white-space:nowrap}
-/* FOOTER */
+.hist-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist-time{color:var(--tx3);font-size:11px}
 .footer{text-align:center;padding:16px 0;font-size:11px;color:var(--tx3)}
-/* NEW UPLOAD BTN */
 .new-btn{background:var(--surf);border:1px solid var(--bd);border-radius:10px;padding:10px;font-size:13px;cursor:pointer;color:var(--tx2);width:100%;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:7px}
-.new-btn:active{transform:scale(.98)}
 </style>
 </head>
 <body>
@@ -69,12 +63,10 @@ html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;backgr
     <div class="header-title">رفع ملف المتابعة</div>
     <div class="header-sub">البرنامج الوطني للتطعيم 2026</div>
   </div>
-
   <div class="status-bar wait" id="statusBar">
     <span id="statusDot">⏳</span>
     <span id="statusTxt">جاري الاتصال...</span>
   </div>
-
   <div class="drop-zone" id="dz" onclick="document.getElementById('fi').click()" ondragover="dov(event)" ondragleave="dol(event)" ondrop="dop(event)">
     <div class="dz-icon">📂</div>
     <div class="dz-title">ارفع ملف لوحة المتابعة</div>
@@ -82,13 +74,10 @@ html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;backgr
     <button class="dz-btn" onclick="event.stopPropagation();document.getElementById('fi').click()">📎 اختر الملف</button>
   </div>
   <input type="file" id="fi" accept=".xlsx,.xls" onchange="loadFile(event)" style="display:none">
-
   <div class="progress-card" id="progCard">
     <div class="prog-title" id="progTitle">جاري المعالجة...</div>
     <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
-    <div class="prog-detail" id="progDetail"></div>
   </div>
-
   <div class="success-card" id="successCard">
     <div class="success-icon">✅</div>
     <div class="success-title">تم الرفع بنجاح!</div>
@@ -96,20 +85,16 @@ html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;backgr
     <div id="successDetails"></div>
     <button class="new-btn" onclick="resetUpload()">📂 رفع ملف جديد</button>
   </div>
-
   <div class="history-card" id="histCard" style="display:none">
     <div class="history-title">📋 آخر الملفات المرفوعة</div>
     <div id="histList"></div>
   </div>
-
   <div class="footer">لوحة متابعة التطعيم 2026 · رفع الملفات</div>
 </div>
-
 <script>
 const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 let fbDb=null, uploadHistory=[];
 
-// INIT FIREBASE
 (function(){
   try{
     firebase.initializeApp({
@@ -169,22 +154,23 @@ function procFile(file){
           fileSize:file.size,
           municipalities:D.municipalities.length,
           activeMonths,
-          uploadedBy:'موظف'
+          uploadedBy:'موظف',
+          // ✅ نسبة التزامن مستخرجة من Dashboard مباشرة
+          syncRateMonthly:  D.syncRateMonthly,
+          syncRateAnnual:   D.syncRateAnnual,
+          syncCountMonthly: D.syncCountMonthly,
+          monthSyncStats:   D.monthSyncStats
         }).then(()=>{
           setP(100,'✅ تم الإرسال بنجاح!');
-          // Notify all viewers via Firebase
           fbDb.ref('tatveem/notification').set({
             title:'💉 تحديث جديد — لوحة التطعيم',
-            body:'رُفع ملف: ' + file.name + ' · ' + t,
-            time: t,
-            ts: Date.now(),
-            source: 'upload'
+            body:'رُفع ملف: '+file.name+' · '+t,
+            time:t,ts:Date.now(),source:'upload'
           });
-          // save to history
           const h={name:file.name,time:t,mun:D.municipalities.length};
           uploadHistory.unshift(h);
           if(uploadHistory.length>5) uploadHistory.pop();
-          if(fbDb) fbDb.ref('tatveem/history').set(uploadHistory);
+          fbDb.ref('tatveem/history').set(uploadHistory);
           setTimeout(()=>{
             pc.style.display='none';
             showSuccess(file.name,t,D);
@@ -194,11 +180,11 @@ function procFile(file){
           setTimeout(()=>resetUpload(),3000);
         });
       } else {
-        setP(0,'❌ غير متصل بالشبكة');
+        setP(0,'❌ غير متصل');
         setTimeout(()=>resetUpload(),2000);
       }
     }catch(err){
-      setP(0,'❌ خطأ في قراءة الملف');
+      setP(0,'❌ خطأ في القراءة: '+err.message);
       setTimeout(()=>resetUpload(),2000);
     }
   };
@@ -211,12 +197,18 @@ function setP(pct,lbl){
 }
 
 function showSuccess(name,time,D){
-  const s=D.monthStats.find(m=>m.received>0)||D.monthStats[0];
+  const syncPct = D.syncRateMonthly!=null ? (D.syncRateMonthly*100).toFixed(1)+'%' : '—';
+  const syncAnnualPct = D.syncRateAnnual!=null ? (D.syncRateAnnual*100).toFixed(1)+'%' : '—';
   document.getElementById('successDetails').innerHTML=`
     <div class="success-row"><span class="success-lbl">اسم الملف</span><span class="success-val">${name}</span></div>
     <div class="success-row"><span class="success-lbl">وقت الرفع</span><span class="success-val">${time}</span></div>
     <div class="success-row"><span class="success-lbl">عدد البلديات</span><span class="success-val">${D.municipalities.length} بلدية</span></div>
     <div class="success-row"><span class="success-lbl">الأشهر المكتملة</span><span class="success-val">${D.monthStats.filter(m=>m.received>0).length} شهر</span></div>
+    <div class="sync-card">
+      <div class="sync-card-lbl">🔄 نسبة التزامن للشهر المختار</div>
+      <div class="sync-card-val">${syncPct}</div>
+      <div class="sync-card-sub">نسبة التزامن السنوي: ${syncAnnualPct} · ${D.syncCountMonthly||0} بلدية متزامنة</div>
+    </div>
   `;
   document.getElementById('successCard').style.display='block';
   loadHistory();
@@ -229,13 +221,12 @@ function resetUpload(){
 }
 
 function loadHistory(){
-  if(!fbDb) return;
+  if(!fbDb)return;
   fbDb.ref('tatveem/history').once('value',snap=>{
     const h=snap.val();
-    if(!h||!h.length) return;
+    if(!h||!h.length)return;
     uploadHistory=h;
-    const hc=document.getElementById('histCard');
-    hc.style.display='block';
+    document.getElementById('histCard').style.display='block';
     document.getElementById('histList').innerHTML=h.map(i=>`
       <div class="hist-item">
         <div class="hist-dot"></div>
@@ -246,17 +237,22 @@ function loadHistory(){
 }
 
 function arrayToBase64(buf){
-  const bytes=new Uint8Array(buf);
-  let binary='';
-  const chunk=8192;
-  for(let i=0;i<bytes.length;i+=chunk){
-    binary+=String.fromCharCode(...bytes.subarray(i,Math.min(i+chunk,bytes.length)));
-  }
-  return btoa(binary);
+  const bytes=new Uint8Array(buf);let b='';const c=8192;
+  for(let i=0;i<bytes.length;i+=c)b+=String.fromCharCode(...bytes.subarray(i,Math.min(i+c,bytes.length)));
+  return btoa(b);
 }
 
+// ════════════════════════════════════════════════════
+// parseWb — يقرأ نسبة التزامن من Dashboard مباشرة
+// البنية المعروفة:
+//   Row 10, Col B  = نسبة التزامن الشهرية (الملخص)
+//   Row 9,  Col B  = عدد المتزامنين الشهري
+//   Rows 15-26     = جدول الأشهر: col A=الشهر, col E=نسبة التزامن
+// ════════════════════════════════════════════════════
 function parseWb(wb){
   const d={};
+
+  // ── المتابعة ──
   const wsT=wb.Sheets['المتابعة'];
   const rawT=wsT?XLSX.utils.sheet_to_json(wsT,{header:1,defval:''}):[];
   d.trackHeaders=rawT[2]||[];
@@ -267,20 +263,76 @@ function parseWb(wb){
     const col=1+mi*2;let recv=0;const missList=[];
     d.trackRows.forEach(r=>{
       const v=String(r[col]||'').trim();
-      if(v==='تم'||v==='✓') recv++;
-      else missList.push(String(r[0]).trim());
+      if(v==='تم'||v==='✓')recv++;else missList.push(String(r[0]).trim());
     });
     return{month:mn,idx:mi,total,received:recv,notReceived:total-recv,rate:total>0?recv/total:0,missList};
   });
+
+  // ── الخريطة الحرارية ──
   const wsH=wb.Sheets['الخريطة الحرارية'];
   const rawH=wsH?XLSX.utils.sheet_to_json(wsH,{header:1,defval:''}):[];
   d.hmRows=rawH.slice(3).filter(r=>r[0]&&String(r[0]).trim()).map(r=>({
-    name:String(r[0]).trim(),months:Array.from({length:12},(_,i)=>String(r[i+1]||'').trim()),total:parseInt(r[13])||0
+    name:String(r[0]).trim(),
+    months:Array.from({length:12},(_,i)=>String(r[i+1]||'').trim()),
+    total:parseInt(r[13])||0
   }));
+
+  // ── البيانات ──
   const wsD=wb.Sheets['البيانات'];
   const rawD=wsD?XLSX.utils.sheet_to_json(wsD,{header:1,defval:''}):[];
   d.dataHeaders=rawD[2]||[];
   d.dataRows=rawD.slice(3).filter(r=>r[1]&&String(r[1]).trim());
+
+  // ════════════════════════════════════════════════
+  // ✅ استخراج نسبة التزامن من Dashboard
+  // Row 10 col B = نسبة التزامن الشهرية
+  // Row 9  col B = عدد المتزامنين
+  // Rows 15-26: col A=الشهر, col E=نسبة التزامن
+  // ════════════════════════════════════════════════
+  d.syncRateMonthly  = null;
+  d.syncRateAnnual   = null;
+  d.syncCountMonthly = null;
+  d.monthSyncStats   = [];
+
+  const wsDash=wb.Sheets['Dashboard'];
+  if(wsDash){
+    const raw=XLSX.utils.sheet_to_json(wsDash,{header:1,defval:''});
+
+    // Row 10 (index 9) = نسبة التزامن الشهرية — col B (index 1)
+    if(raw[9] && raw[9][1]!=null){
+      const v=parseFloat(raw[9][1]);
+      if(!isNaN(v)) d.syncRateMonthly = v>1 ? v/100 : v;
+    }
+
+    // Row 9 (index 8) = عدد المتزامنين — col B (index 1)
+    if(raw[8] && raw[8][1]!=null){
+      const v=parseInt(raw[8][1]);
+      if(!isNaN(v)) d.syncCountMonthly = v;
+    }
+
+    // Rows 15-26 (indices 14-25) = جدول الأشهر الشهري
+    // col A (index 0) = اسم الشهر
+    // col D (index 3) = عدد المتزامن
+    // col E (index 4) = نسبة التزامن
+    for(let i=14;i<=25;i++){
+      const row=raw[i];
+      if(!row) continue;
+      const monthName=String(row[0]||'').trim();
+      if(!MONTHS.includes(monthName)) continue;
+      const syncCount=parseFloat(row[3])||0;
+      let   syncRate =parseFloat(row[4]);
+      if(isNaN(syncRate)) syncRate=0;
+      if(syncRate>1) syncRate=syncRate/100;
+      d.monthSyncStats.push({month:monthName,syncCount,syncRate});
+    }
+
+    // نسبة التزامن السنوية = متوسط الأشهر التي فيها بيانات
+    const withData=d.monthSyncStats.filter(m=>m.syncCount>0);
+    if(withData.length>0){
+      d.syncRateAnnual=withData.reduce((s,m)=>s+m.syncRate,0)/withData.length;
+    }
+  }
+
   return d;
 }
 
