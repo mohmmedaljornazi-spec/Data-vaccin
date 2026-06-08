@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -20,20 +19,16 @@
   --g:#1d9e75;--g2:#0f6e56;--gbg:#e1f5ee;--gbd:#9fe1cb;
   --r:#e24b4a;--rbg:#fcebeb;--rbd:#f7c1c1;
   --am:#ba7517;--ambg:#faeeda;--ambd:#fac775;
+  --cy:#0891b2;--cybg:rgba(8,145,178,.1);
   --navy:#0f172a;--navy2:#1e293b;
   --bg:#f8fafc;--card:#fff;--surf:#f1f5f9;
   --tx:#0f172a;--tx2:#64748b;--tx3:#94a3b8;
   --bd:rgba(0,0,0,0.08);--bd2:rgba(0,0,0,0.13)
 }
-@media(prefers-color-scheme:dark){:root{
-  --bg:#0f172a;--card:#1e293b;--surf:#334155;
-  --tx:#f1f5f9;--tx2:#94a3b8;--tx3:#64748b;
-  --bd:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.13)
-}}
+@media(prefers-color-scheme:dark){:root{--bg:#0f172a;--card:#1e293b;--surf:#334155;--tx:#f1f5f9;--tx2:#94a3b8;--tx3:#64748b;--bd:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.13)}}
 html,body{height:100%;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx)}
 .app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto}
 
-/* TOP BAR */
 .topbar{background:var(--navy);padding:10px 14px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .topbar-l{display:flex;flex-direction:column}
 .app-title{color:#e8f5e9;font-size:14px;font-weight:600}
@@ -42,53 +37,42 @@ html,body{height:100%;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:
 .live-badge{display:flex;align-items:center;gap:5px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:14px;padding:4px 9px;font-size:10px;color:#4ade80}
 .dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:blink 1.5s infinite;display:inline-block}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
-/* NOTIF BELL */
 .notif-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:4px 9px;font-size:11px;color:rgba(255,255,255,.7);cursor:pointer;display:flex;align-items:center;gap:4px}
 .notif-btn.on{background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.3);color:#4ade80}
 
-/* INSTALL BANNER */
 #installBanner{background:linear-gradient(135deg,rgba(29,158,117,.25),rgba(15,110,86,.2));border:1px solid rgba(29,158,117,.35);border-radius:14px;padding:12px 14px;margin:10px 12px 0;display:none;align-items:center;gap:10px}
 #installBanner.show{display:flex}
 .ib-text{flex:1}.ib-text strong{display:block;font-size:13px;font-weight:700;color:#e8f5e9;margin-bottom:2px}
 .ib-text span{font-size:11px;color:rgba(255,255,255,.5)}
-#installBtn{background:var(--g);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+#installBtn{background:var(--g);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer}
 #dismissInstall{background:transparent;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;flex-shrink:0}
-
-/* iOS HINT */
 #iosHint{background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);border-radius:12px;padding:10px 14px;margin:8px 12px 0;display:none;font-size:11px;color:#6ee7b7;line-height:1.8;text-align:center}
 #iosHint.show{display:block}
-
-/* NOTIF BANNER */
 #notifBanner{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:10px 14px;margin:8px 12px 0;display:none;align-items:center;gap:8px;font-size:12px;color:#fcd34d}
 #notifBanner.show{display:flex}
 #notifBanner span{flex:1}
-#allowNotifBtn{background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.35);color:#fcd34d;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+#allowNotifBtn{background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.35);color:#fcd34d;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer}
 
-/* MONTH NAV */
 .month-nav{background:var(--navy2);padding:8px 10px;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
 .month-nav::-webkit-scrollbar{display:none}
 .m-arr{background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.6);border-radius:6px;padding:5px 8px;font-size:13px;cursor:pointer;flex-shrink:0}
-.m-btn{padding:5px 10px;border-radius:12px;font-size:10px;font-weight:500;cursor:pointer;white-space:nowrap;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.45);transition:all .15s;flex-shrink:0}
+.m-btn{padding:5px 10px;border-radius:12px;font-size:10px;font-weight:500;cursor:pointer;white-space:nowrap;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.45);flex-shrink:0}
 .m-btn.active{background:var(--g);border-color:var(--g);color:#fff}
 .m-btn.dim{opacity:.3}
 
-/* NAV TABS */
 .nav-tabs{display:flex;background:var(--card);border-bottom:1px solid var(--bd);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
 .nav-tabs::-webkit-scrollbar{display:none}
-.nav-tab{flex:1;min-width:48px;padding:9px 4px;text-align:center;font-size:9px;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.nav-tab{flex:1;min-width:48px;padding:9px 4px;text-align:center;font-size:9px;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
 .nav-tab.active{color:var(--g);border-bottom-color:var(--g);font-weight:600}
 .nav-tab-icon{font-size:15px;display:block;margin-bottom:2px}
 
-/* CONTENT */
 .content{flex:1;overflow-y:auto;padding:12px}
 .view{display:none}.view.active{display:block}
 
-/* WAITING */
 .waiting{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;text-align:center}
 .waiting-icon{font-size:48px;margin-bottom:14px;animation:float 2s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.waiting-title{font-size:16px;font-weight:600;color:var(--tx);margin-bottom:6px}
+.waiting-title{font-size:16px;font-weight:600;margin-bottom:6px}
 .waiting-sub{font-size:13px;color:var(--tx2);line-height:1.6}
 
 /* KPI */
@@ -97,28 +81,25 @@ html,body{height:100%;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:
 .kpi-lbl{font-size:10px;color:var(--tx2);margin-bottom:4px}
 .kpi-val{font-size:24px;font-weight:700;color:var(--tx)}
 .kpi.g .kpi-val{color:var(--g)}.kpi.r .kpi-val{color:var(--r)}.kpi.am .kpi-val{color:var(--am)}
+.kpi.cy .kpi-val{color:var(--cy)}.kpi.cy{border-color:rgba(8,145,178,.2)}
 
-/* EXPORT BUTTONS */
-.export-section{background:var(--card);border:1px solid var(--bd);border-radius:10px;margin-bottom:11px;overflow:hidden}
-.export-section-title{font-size:11px;font-weight:600;color:var(--tx2);padding:10px 12px 6px;border-bottom:1px solid var(--bd)}
-.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}
-.exp-btn{background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:10px 8px;text-align:center;cursor:pointer;font-size:11px;color:var(--tx2);transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:4px}
-.exp-btn:active{transform:scale(.97)}
-.exp-btn .ei{font-size:20px}
-.exp-btn.primary{background:rgba(29,158,117,.1);border-color:var(--gbd);color:var(--g2)}
-.exp-btn.primary .ei-lbl{color:var(--g2);font-weight:600}
+/* ✅ بطاقة التزامن الكبيرة */
+.sync-hero{background:linear-gradient(135deg,var(--cybg),rgba(8,145,178,.04));border:1.5px solid rgba(8,145,178,.3);border-radius:14px;padding:16px;margin-bottom:11px;display:flex;align-items:center;gap:14px}
+.sync-hero-icon{font-size:28px;flex-shrink:0}
+.sync-hero-body{flex:1}
+.sync-hero-label{font-size:11px;color:#0e7490;font-weight:600;margin-bottom:4px}
+.sync-hero-val{font-size:28px;font-weight:800;color:var(--cy);line-height:1}
+.sync-hero-sub{font-size:10px;color:var(--tx3);margin-top:3px}
 
-/* CARD */
+/* CARD & BARS */
 .card{background:var(--card);border:1px solid var(--bd);border-radius:10px;margin-bottom:11px;overflow:hidden}
 .card-hd{padding:9px 12px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600;color:var(--tx2)}
-
-/* BARS */
 .bar-row{display:flex;align-items:center;gap:8px;padding:5px 12px}
 .bar-lbl{font-size:10px;color:var(--tx2);width:50px;text-align:right;flex-shrink:0}
 .bar-track{flex:1;background:var(--surf);border-radius:3px;height:8px;overflow:hidden}
 .bar-fill{height:100%;border-radius:3px;transition:width .6s}
-.bar-fill.g{background:var(--g)}.bar-fill.r{background:var(--r)}.bar-fill.am{background:var(--am)}
-.bar-val{font-size:10px;color:var(--tx);width:32px;text-align:left;flex-shrink:0}
+.bar-fill.g{background:var(--g)}.bar-fill.r{background:var(--r)}.bar-fill.am{background:var(--am)}.bar-fill.cy{background:var(--cy)}
+.bar-val{font-size:10px;color:var(--tx);width:34px;text-align:left;flex-shrink:0}
 
 /* TABLE */
 .tbl-wrap{overflow-x:auto;max-height:340px;overflow-y:auto}
@@ -145,63 +126,32 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
 .hc.no{background:#fecaca;color:#7f1d1d}
 .hc.na{background:var(--surf);color:var(--tx3)}
 
-/* MISS LIST */
+/* MISS */
 .miss-item{display:flex;align-items:center;gap:7px;padding:7px 12px;border-bottom:1px solid var(--bd);font-size:12px}
 .miss-item:last-child{border-bottom:none}
 .miss-n{color:var(--tx3);width:22px;text-align:right;flex-shrink:0;font-size:11px}
 .miss-name{flex:1}
 .miss-badge{font-size:10px;background:var(--rbg);color:#7f1d1d;border:1px solid var(--rbd);padding:1px 7px;border-radius:8px}
-
-/* LAST UPDATE */
 .last-update{text-align:center;font-size:10px;color:var(--tx3);padding:8px 0}
 
-/* TOAST */
-.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#052e16;color:#bbf7d0;border:1px solid rgba(29,158,117,.35);border-radius:12px;padding:10px 16px;font-weight:700;z-index:80;box-shadow:0 8px 30px rgba(0,0,0,.28);min-width:200px;text-align:center;font-size:13px}
-.toast.bad{background:#450a0a;color:#fecaca;border-color:rgba(239,68,68,.35)}
+/* EXPORT */
+.export-section{background:var(--card);border:1px solid var(--bd);border-radius:10px;margin-bottom:11px;overflow:hidden}
+.export-section-title{font-size:11px;font-weight:600;color:var(--tx2);padding:10px 12px 6px;border-bottom:1px solid var(--bd)}
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}
+.exp-btn{background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:10px 8px;text-align:center;cursor:pointer;font-size:11px;color:var(--tx2);display:flex;flex-direction:column;align-items:center;gap:4px}
+.exp-btn:active{transform:scale(.97)}
+.exp-btn .ei{font-size:20px}
+.exp-btn.primary{background:rgba(29,158,117,.1);border-color:var(--gbd);color:var(--g2)}
 
-  /* FIXED INSTALL BUTTON */
-  #fixedInstallBtn{
-    position:fixed;bottom:0;left:0;right:0;
-    background:linear-gradient(135deg,#1d9e75,#0f6e56);
-    color:#fff;border:none;padding:16px;font-size:15px;font-weight:700;
-    cursor:pointer;z-index:999;display:none;
-    align-items:center;justify-content:center;gap:10px;
-    box-shadow:0 -4px 20px rgba(29,158,117,.4);
-    font-family:'Segoe UI',Tahoma,Arial,sans-serif;
-    letter-spacing:.3px;
-  }
-  #fixedInstallBtn.show{display:flex}
-  #fixedInstallBtn .fi-arrow{font-size:20px;animation:bounce 1.2s infinite}
-  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#052e16;color:#bbf7d0;border:1px solid rgba(29,158,117,.35);border-radius:12px;padding:10px 16px;font-weight:700;z-index:80;min-width:200px;text-align:center;font-size:13px}
+.toast.bad{background:#450a0a;color:#fecaca}
 
-  /* INSTALL GUIDE OVERLAY */
-  #installGuide{
-    position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;
-    display:none;align-items:flex-end;justify-content:center;padding:0
-  }
-  #installGuide.show{display:flex}
-  .ig-sheet{
-    background:#1e293b;border-radius:24px 24px 0 0;
-    padding:20px 20px 32px;width:100%;max-width:430px;
-    border-top:3px solid #1d9e75;
-  }
-  .ig-title{font-size:16px;font-weight:700;color:#e8f5e9;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-  .ig-sub{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:18px}
-  .ig-step{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.06);border-radius:12px;margin-bottom:10px}
-  .ig-num{width:28px;height:28px;border-radius:50%;background:#1d9e75;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .ig-txt{font-size:13px;color:#f1f5f9;line-height:1.5}
-  .ig-txt b{color:#4ade80}
-  .ig-img{font-size:22px;margin-left:auto;flex-shrink:0}
-  .ig-close{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px;color:#94a3b8;font-size:13px;cursor:pointer;margin-top:6px;font-family:inherit}
-  .ig-arrow{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);font-size:32px;animation:bounce2 1s infinite;z-index:10000;pointer-events:none;display:none}
-  .ig-arrow.show{display:block}
-  @keyframes bounce2{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+#fixedInstallBtn{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#1d9e75,#0f6e56);color:#fff;border:none;padding:16px;font-size:15px;font-weight:700;cursor:pointer;z-index:999;display:none;align-items:center;justify-content:center;gap:10px}
+#fixedInstallBtn.show{display:flex}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- TOP BAR -->
   <div class="topbar">
     <div class="topbar-l">
       <div class="app-title">💉 متابعة التطعيم 2026</div>
@@ -209,43 +159,28 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
     </div>
     <div class="topbar-r">
       <button class="notif-btn" id="notifToggle" onclick="toggleNotif()">🔔 إشعارات</button>
-      <div class="live-badge" id="liveBadge" style="display:none">
-        <span class="dot"></span> مباشر
-      </div>
+      <div class="live-badge" id="liveBadge" style="display:none"><span class="dot"></span> مباشر</div>
     </div>
   </div>
 
-  <!-- INSTALL BANNER -->
   <div id="installBanner">
     <div style="font-size:22px">📲</div>
-    <div class="ib-text">
-      <strong>ثبّت التطبيق على هاتفك</strong>
-      <span>يعمل بدون إنترنت ويستقبل إشعارات صوتية</span>
-    </div>
+    <div class="ib-text"><strong>ثبّت التطبيق على هاتفك</strong><span>يعمل بدون إنترنت ويستقبل إشعارات صوتية</span></div>
     <button id="installBtn" onclick="doInstall()">تثبيت</button>
     <button id="dismissInstall" onclick="hideInstall()">✕</button>
   </div>
-
-  <!-- iOS HINT -->
-  <div id="iosHint">
-    📱 لتثبيت التطبيق على iPhone:<br>
-    اضغط <strong>مشاركة ⬆️</strong> ← <strong>إضافة إلى الشاشة الرئيسية</strong>
-  </div>
-
-  <!-- NOTIF BANNER -->
+  <div id="iosHint">📱 لتثبيت التطبيق على iPhone:<br>اضغط <strong>مشاركة ⬆️</strong> ← <strong>إضافة إلى الشاشة الرئيسية</strong></div>
   <div id="notifBanner">
     <span>🔔 فعّل الإشعارات لتصلك تنبيهات صوتية عند رفع بيانات جديدة</span>
     <button id="allowNotifBtn" onclick="requestNotif()">تفعيل</button>
   </div>
 
-  <!-- MONTH NAV -->
   <div class="month-nav" id="monthNav" style="display:none">
     <button class="m-arr" onclick="prevM()">◀</button>
     <div id="mBtns" style="display:flex;gap:5px;overflow-x:auto;scrollbar-width:none"></div>
     <button class="m-arr" onclick="nextM()">▶</button>
   </div>
 
-  <!-- NAV TABS -->
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="switchTab('dash',this)"><span class="nav-tab-icon">📊</span>لوحة</div>
     <div class="nav-tab" onclick="switchTab('missing',this)"><span class="nav-tab-icon">❌</span>غير مستلم</div>
@@ -255,7 +190,6 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
     <div class="nav-tab" onclick="switchTab('export',this)"><span class="nav-tab-icon">📥</span>تصدير</div>
   </div>
 
-  <!-- CONTENT -->
   <div class="content">
 
     <!-- DASHBOARD -->
@@ -270,10 +204,25 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
           <div class="kpi"><div class="kpi-lbl">🏛 البلديات</div><div class="kpi-val" id="kT">—</div></div>
           <div class="kpi g"><div class="kpi-lbl">✅ المستلمة</div><div class="kpi-val" id="kR">—</div></div>
           <div class="kpi r"><div class="kpi-lbl">❌ غير المستلمة</div><div class="kpi-val" id="kM">—</div></div>
-          <div class="kpi am"><div class="kpi-lbl">📈 التكامل</div><div class="kpi-val" id="kP">—</div></div>
+          <div class="kpi am"><div class="kpi-lbl">📈 نسبة التكامل</div><div class="kpi-val" id="kP">—</div></div>
         </div>
-        <div class="card"><div class="card-hd">📈 المقارنة الشهرية</div><div id="dashBars" style="padding:6px 0 4px"></div></div>
-        <div class="card"><div class="card-hd">📊 نسب التكامل</div><div id="rateBars" style="padding:6px 0 4px"></div></div>
+
+        <!-- ✅ بطاقة نسبة التزامن الشهرية -->
+        <div class="sync-hero" id="syncHero" style="display:none">
+          <div class="sync-hero-icon">🔄</div>
+          <div class="sync-hero-body">
+            <div class="sync-hero-label">نسبة التزامن للشهر المختار</div>
+            <div class="sync-hero-val" id="syncHeroVal">—</div>
+            <div class="sync-hero-sub">
+              <span id="syncHeroCount">—</span> بلدية متزامنة &nbsp;·&nbsp; سنوياً: <span id="syncHeroAnnual">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card"><div class="card-hd">📈 المقارنة الشهرية — الاستلام</div><div id="dashBars" style="padding:6px 0 4px"></div></div>
+        <!-- ✅ شريط التزامن الشهري -->
+        <div class="card"><div class="card-hd">🔄 نسبة التزامن الشهرية</div><div id="syncBars" style="padding:6px 0 4px"></div></div>
+        <div class="card"><div class="card-hd">📊 نسب التكامل الشهرية</div><div id="rateBars" style="padding:6px 0 4px"></div></div>
         <div class="last-update" id="lastUpdateTxt"></div>
       </div>
     </div>
@@ -312,7 +261,7 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
         <div class="kpi g"><div class="kpi-lbl">✅ مقبول</div><div class="kpi-val" id="dMq">—</div></div>
         <div class="kpi am"><div class="kpi-lbl">⚠ ضعيف</div><div class="kpi-val" id="dDh">—</div></div>
         <div class="kpi r"><div class="kpi-lbl">❌ لم يرسل</div><div class="kpi-val" id="dNr">—</div></div>
-        <div class="kpi"><div class="kpi-lbl">متوسط الأشهر</div><div class="kpi-val" id="dAvg">—</div></div>
+        <div class="kpi cy"><div class="kpi-lbl">🔄 التزامن السنوي</div><div class="kpi-val" id="dSync">—</div></div>
       </div>
       <div class="card">
         <div class="card-hd">📂 البيانات السنوية</div>
@@ -320,367 +269,255 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
       </div>
     </div>
 
-    <!-- EXPORT TAB -->
+    <!-- EXPORT -->
     <div class="view" id="view-export">
       <div class="export-section">
         <div class="export-section-title">📊 تصدير ملف Excel</div>
         <div class="exp-grid">
-          <div class="exp-btn primary" onclick="exportOriginal()">
-            <div class="ei">📊</div>
-            <div class="ei-lbl" style="font-size:11px;font-weight:700">الملف الأصلي</div>
-            <div style="font-size:10px;color:var(--tx3)">مطابق 100%</div>
-          </div>
-          <div class="exp-btn" onclick="exportCustom('full')">
-            <div class="ei">💾</div>
-            <div class="ei-lbl">تقرير كامل</div>
-            <div style="font-size:10px;color:var(--tx3)">جميع البيانات</div>
-          </div>
-          <div class="exp-btn" onclick="exportCustom('month')">
-            <div class="ei">📅</div>
-            <div class="ei-lbl">الشهر الحالي</div>
-            <div style="font-size:10px;color:var(--tx3)" id="expMonthName">—</div>
-          </div>
-          <div class="exp-btn" onclick="exportCustom('missing')">
-            <div class="ei">❌</div>
-            <div class="ei-lbl">غير المستلمة</div>
-            <div style="font-size:10px;color:var(--tx3)">كل الأشهر</div>
-          </div>
-          <div class="exp-btn" onclick="exportCustom('heatmap')">
-            <div class="ei">🔥</div>
-            <div class="ei-lbl">الخريطة الحرارية</div>
-            <div style="font-size:10px;color:var(--tx3)">أداء سنوي</div>
-          </div>
-          <div class="exp-btn" onclick="downloadTemplate()">
-            <div class="ei">📋</div>
-            <div class="ei-lbl">قالب Excel</div>
-            <div style="font-size:10px;color:var(--tx3)">للموظفين</div>
-          </div>
+          <div class="exp-btn primary" onclick="exportOriginal()"><div class="ei">📊</div><div class="ei-lbl" style="font-weight:700">الملف الأصلي</div><div style="font-size:10px;color:var(--tx3)">مطابق 100%</div></div>
+          <div class="exp-btn" onclick="exportCustom('full')"><div class="ei">💾</div><div>تقرير كامل</div></div>
+          <div class="exp-btn" onclick="exportCustom('month')"><div class="ei">📅</div><div>الشهر الحالي</div><div style="font-size:10px;color:var(--tx3)" id="expMonthName">—</div></div>
+          <div class="exp-btn" onclick="exportCustom('missing')"><div class="ei">❌</div><div>غير المستلمة</div></div>
+          <div class="exp-btn" onclick="exportCustom('heatmap')"><div class="ei">🔥</div><div>الخريطة الحرارية</div></div>
+          <div class="exp-btn" onclick="downloadTemplate()"><div class="ei">📋</div><div>قالب Excel</div></div>
         </div>
       </div>
-
-      <div class="export-section" id="noDataMsg" style="display:none">
-        <div style="padding:20px;text-align:center;color:var(--tx3);font-size:13px">
-          📡 في انتظار البيانات...<br>
-          <span style="font-size:11px">سيتاح التصدير بعد رفع الموظف للملف</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-hd">ℹ️ معلومات آخر ملف</div>
-        <div id="fileInfo" style="padding:12px;font-size:12px;color:var(--tx2);line-height:1.9">
-          لا توجد بيانات بعد
-        </div>
-      </div>
+      <div class="card"><div class="card-hd">ℹ️ معلومات آخر ملف</div><div id="fileInfo" style="padding:12px;font-size:12px;color:var(--tx2);line-height:1.9">لا توجد بيانات بعد</div></div>
     </div>
 
-  </div><!-- end content -->
-
-
-  <!-- INSTALL GUIDE -->
-  <div id="installGuide" onclick="if(event.target.id==='installGuide')closeGuide()">
-    <div class="ig-sheet">
-      <div class="ig-title">📲 تثبيت التطبيق</div>
-      <div class="ig-sub">اتبع هذه الخطوات البسيطة</div>
-
-      <div class="ig-step">
-        <div class="ig-num">1</div>
-        <div class="ig-txt">اضغط على أيقونة <b>النقاط الثلاث ⋮</b> في أعلى يمين Chrome</div>
-        <div class="ig-img">⋮</div>
-      </div>
-
-      <div class="ig-step">
-        <div class="ig-num">2</div>
-        <div class="ig-txt">اختر <b>"إضافة إلى الشاشة الرئيسية"</b> أو <b>"Install app"</b></div>
-        <div class="ig-img">📱</div>
-      </div>
-
-      <div class="ig-step">
-        <div class="ig-num">3</div>
-        <div class="ig-txt">اضغط <b>"إضافة"</b> في النافذة التي تظهر</div>
-        <div class="ig-img">✅</div>
-      </div>
-
-      <button class="ig-close" onclick="closeGuide()">إغلاق</button>
-    </div>
   </div>
-  <div class="ig-arrow" id="igArrow">👆</div>
 
-  <!-- FIXED INSTALL BUTTON -->
-  <button id="fixedInstallBtn" onclick="doInstall()">
-    <span class="fi-arrow">📲</span>
-    <span>تثبيت التطبيق على الهاتف</span>
-  </button>
+  <button id="fixedInstallBtn" onclick="doInstall()">📲 تثبيت التطبيق على الهاتف</button>
 </div>
 
 <script>
 const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-let D=null, activeMonth=0, activeTab='dash';
-let rawFileBase64=null, rawFileName='لوحة_المتابعة.xlsx';
+let D=null, activeMonth=0, rawFileBase64=null, rawFileName='لوحة_المتابعة.xlsx';
 let notifEnabled=false, deferredInstallPrompt=null;
 
-// ── FIREBASE ──
 firebase.initializeApp({
   apiKey:"AIzaSyAQu8K8INyELqYc-XDztspa7JTfBS0v1AE",
   projectId:"tatveem2026",
   databaseURL:"https://tatveem2026-default-rtdb.firebaseio.com",
   authDomain:"tatveem2026.firebaseapp.com"
 });
-const db = firebase.database();
+const db=firebase.database();
 
-// ── مراقبة الإشعارات ──
-let notifReady = false;
-db.ref('tatveem/notification').on('value', snap => {
-  const val = snap.val();
-  if (!val) return;
-  if (!notifReady) { notifReady = true; return; }
-  showToast('💉 ' + (val.body || 'تم رفع بيانات جديدة'));
+let notifReady=false;
+db.ref('tatveem/notification').on('value',snap=>{
+  const val=snap.val();if(!val)return;
+  if(!notifReady){notifReady=true;return;}
+  showToast('💉 '+(val.body||'تم رفع بيانات جديدة'));
   playSound();
-  sendNotif(val.title || '💉 تحديث جديد', val.body || 'تم رفع بيانات جديدة');
-  try { if (navigator.vibrate) navigator.vibrate([300,100,300,100,300]); } catch(e) {}
+  sendNotif(val.title||'💉 تحديث',val.body||'تم رفع بيانات جديدة');
+  try{if(navigator.vibrate)navigator.vibrate([300,100,300]);}catch(e){}
 });
 
-// ── مراقبة البيانات ──
-db.ref('tatveem/latest').on('value', snap => {
-  const val = snap.val();
-  if (!val) return;
-  try {
-    D = JSON.parse(val.data);
-    activeMonth = val.activeMonth || 0;
-    rawFileBase64 = val.fileBase64 || null;
-    rawFileName = val.fileName || 'لوحة_المتابعة_2026.xlsx';
-    document.getElementById('liveBadge').style.display = 'flex';
-    document.getElementById('lastUpd').textContent = 'آخر رفع: ' + val.uploadTime;
-    document.getElementById('lastUpdateTxt').textContent = 'رُفع بواسطة: ' + (val.uploadedBy||'موظف') + ' · ' + val.uploadTime;
-    document.getElementById('monthNav').style.display = 'flex';
-    document.getElementById('dashWaiting').style.display = 'none';
-    document.getElementById('dashContent').style.display = 'block';
-    document.getElementById('noDataMsg').style.display = 'none';
-    document.getElementById('fileInfo').innerHTML = `
+db.ref('tatveem/latest').on('value',snap=>{
+  const val=snap.val();if(!val)return;
+  try{
+    D=JSON.parse(val.data);
+    activeMonth=val.activeMonth||0;
+    rawFileBase64=val.fileBase64||null;
+    rawFileName=val.fileName||'لوحة_المتابعة_2026.xlsx';
+
+    // ✅ قراءة نسبة التزامن من Firebase
+    D.syncRateMonthly  = val.syncRateMonthly  !=null ? val.syncRateMonthly  : (D.syncRateMonthly||null);
+    D.syncRateAnnual   = val.syncRateAnnual   !=null ? val.syncRateAnnual   : (D.syncRateAnnual||null);
+    D.syncCountMonthly = val.syncCountMonthly !=null ? val.syncCountMonthly : (D.syncCountMonthly||null);
+    D.monthSyncStats   = val.monthSyncStats   ||       D.monthSyncStats     ||[];
+
+    document.getElementById('liveBadge').style.display='flex';
+    document.getElementById('lastUpd').textContent='آخر رفع: '+val.uploadTime;
+    document.getElementById('lastUpdateTxt').textContent='رُفع بواسطة: '+(val.uploadedBy||'موظف')+' · '+val.uploadTime;
+    document.getElementById('monthNav').style.display='flex';
+    document.getElementById('dashWaiting').style.display='none';
+    document.getElementById('dashContent').style.display='block';
+
+    // معلومات الملف مع نسبة التزامن
+    const syncInfo=D.syncRateMonthly!=null
+      ?`<div>🔄 <b>نسبة التزامن:</b> <span style="color:#0891b2;font-weight:700">${(D.syncRateMonthly*100).toFixed(1)}%</span></div>`
+      :'';
+    document.getElementById('fileInfo').innerHTML=`
       <div>📄 <b>الملف:</b> ${val.fileName||'—'}</div>
       <div>🕐 <b>وقت الرفع:</b> ${val.uploadTime||'—'}</div>
       <div>👤 <b>رُفع بواسطة:</b> ${val.uploadedBy||'—'}</div>
       <div>🏛 <b>عدد البلديات:</b> ${val.municipalities||'—'}</div>
-      <div>📦 <b>حجم الملف:</b> ${val.fileSize ? Math.round(val.fileSize/1024)+'KB' : '—'}</div>
+      ${syncInfo}
     `;
     buildMonthNav();
     renderAll();
-  } catch(e) { console.error(e); }
+  }catch(e){console.error(e);}
 });
 
-db.ref('.info/connected').on('value', snap => {
-  if (!snap.val()) document.getElementById('lastUpd').textContent = 'انقطع الاتصال...';
+db.ref('.info/connected').on('value',snap=>{
+  if(!snap.val()) document.getElementById('lastUpd').textContent='انقطع الاتصال...';
 });
 
-// ── PWA INSTALL ──
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-
-function setupInstall() {
-  if (isStandalone) return; // مثبّت بالفعل
-
-  if (isIOS) {
-    setTimeout(() => document.getElementById('iosHint').classList.add('show'), 1000);
-    return;
-  }
-
-  // Android: أظهر الزر الثابت فوراً
-  const fixedBtn = document.getElementById('fixedInstallBtn');
-  if (fixedBtn) fixedBtn.classList.add('show');
-
-  window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    deferredInstallPrompt = e;
-    // الزر موجود بالفعل، لا حاجة لإظهار البانر
-  });
-
-  window.addEventListener('appinstalled', () => {
-    if (fixedBtn) fixedBtn.classList.remove('show');
-    document.getElementById('installBanner').classList.remove('show');
-    deferredInstallPrompt = null;
-    showToast('✅ تم تثبيت التطبيق بنجاح 🎉');
-  });
+// PWA
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+function setupInstall(){
+  if(isStandalone)return;
+  if(isIOS){setTimeout(()=>document.getElementById('iosHint').classList.add('show'),1000);return;}
+  const btn=document.getElementById('fixedInstallBtn');
+  if(btn)btn.classList.add('show');
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;});
+  window.addEventListener('appinstalled',()=>{btn?.classList.remove('show');deferredInstallPrompt=null;showToast('✅ تم تثبيت التطبيق 🎉');});
 }
-
-async function doInstall() {
-  if (!deferredInstallPrompt) return;
+async function doInstall(){
+  if(!deferredInstallPrompt)return;
   deferredInstallPrompt.prompt();
-  const result = await deferredInstallPrompt.userChoice;
-  deferredInstallPrompt = null;
-  if (result.outcome === 'accepted') {
-    document.getElementById('fixedInstallBtn')?.classList.remove('show');
-    showToast('✅ جاري تثبيت التطبيق...');
-  }
+  const r=await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt=null;
+  if(r.outcome==='accepted'){document.getElementById('fixedInstallBtn')?.classList.remove('show');}
 }
+function hideInstall(){document.getElementById('installBanner').classList.remove('show');}
 
-function hideInstall() {
-  document.getElementById('installBanner').classList.remove('show');
-}
-
-// ── NOTIFICATIONS ──
-async function requestNotif() {
-  if (!('Notification' in window)) { showToast('المتصفح لا يدعم الإشعارات', true); return; }
-  const perm = await Notification.requestPermission();
-  if (perm === 'granted') {
-    notifEnabled = true;
+// NOTIF
+async function requestNotif(){
+  if(!('Notification' in window)){showToast('المتصفح لا يدعم الإشعارات',true);return;}
+  const p=await Notification.requestPermission();
+  if(p==='granted'){
     document.getElementById('notifBanner').classList.remove('show');
     document.getElementById('notifToggle').classList.add('on');
-    document.getElementById('notifToggle').textContent = '🔔 مفعّل';
-    startBgWatch();
-    showToast('✅ تم تفعيل الإشعارات الصوتية');
-    sendNotif('💉 تطعيم 2026 ✓', 'ستصلك إشعارات صوتية عند رفع بيانات جديدة');
-  } else {
-    showToast('لم يتم السماح — تحقق من إعدادات المتصفح', true);
-  }
+    document.getElementById('notifToggle').textContent='🔔 مفعّل';
+    if('serviceWorker' in navigator) navigator.serviceWorker.ready.then(r=>r.active?.postMessage({type:'START_WATCH'}));
+    showToast('✅ تم تفعيل الإشعارات');
+    sendNotif('💉 تطعيم 2026','ستصلك إشعارات عند رفع بيانات جديدة');
+  }else showToast('لم يتم السماح',true);
+}
+function toggleNotif(){if(Notification.permission==='granted')showToast('الإشعارات مفعّلة ✓');else requestNotif();}
+function sendNotif(title,body){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  if(navigator.serviceWorker?.controller){navigator.serviceWorker.controller.postMessage({type:'SHOW_NOTIFICATION',title,body});return;}
+  try{new Notification(title,{body,icon:'./icons/icon-192.png',dir:'rtl',lang:'ar',tag:'tatveem'});}catch(e){}
+}
+function playSound(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    function beep(f,s,d,v=0.5){const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(0,ctx.currentTime+s);g.gain.linearRampToValueAtTime(v,ctx.currentTime+s+0.01);g.gain.linearRampToValueAtTime(0,ctx.currentTime+s+d);o.start(ctx.currentTime+s);o.stop(ctx.currentTime+s+d+0.05);}
+    beep(440,0,0.12);beep(554,0.15,0.12);beep(659,0.3,0.15);beep(880,0.48,0.25,0.7);
+  }catch(e){}
+}
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.addEventListener('message',e=>{if(e.data?.type==='PLAY_SOUND')playSound();});
+  navigator.serviceWorker.register('./sw.js',{scope:'/Data-vaccin/'}).catch(()=>{});
 }
 
-function toggleNotif() {
-  if (Notification.permission === 'granted') {
-    showToast('الإشعارات مفعّلة ✓');
-  } else {
-    requestNotif();
-  }
-}
-
-function sendNotif(title, body) {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  if (navigator.serviceWorker?.controller) {
-    navigator.serviceWorker.controller.postMessage({ type: 'SHOW_NOTIFICATION', title, body });
-    return;
-  }
-  try { new Notification(title, { body, icon: './icons/icon-192.png', dir: 'rtl', lang: 'ar', tag: 'tatveem' }); } catch(e) {}
-}
-
-function startBgWatch() {
-  if (!('serviceWorker' in navigator)) return;
-  navigator.serviceWorker.ready.then(reg => reg.active?.postMessage({ type: 'START_WATCH' }));
-}
-
-// ── SOUND ──
-function playSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    function beep(freq, start, dur, vol=0.5) {
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = freq; o.type = 'sine';
-      g.gain.setValueAtTime(0, ctx.currentTime + start);
-      g.gain.linearRampToValueAtTime(vol, ctx.currentTime + start + 0.01);
-      g.gain.linearRampToValueAtTime(0, ctx.currentTime + start + dur);
-      o.start(ctx.currentTime + start);
-      o.stop(ctx.currentTime + start + dur + 0.05);
-    }
-    beep(440, 0.0, 0.12, 0.5);
-    beep(554, 0.15, 0.12, 0.5);
-    beep(659, 0.30, 0.15, 0.6);
-    beep(880, 0.48, 0.25, 0.7);
-  } catch(e) {}
-}
-
-// استقبال أمر الصوت من SW
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', e => {
-    if (e.data?.type === 'PLAY_SOUND') playSound();
-  });
-}
-
-// ── SERVICE WORKER ──
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js', { scope: '/Data-vaccin/' })
-    .then(() => console.log('[PWA] SW registered'))
-    .catch(e => console.warn('[PWA] SW:', e));
-}
-
-// ── TABS ──
-function switchTab(id, el) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+// TABS
+function switchTab(id,el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('view-'+id).classList.add('active');
   el.classList.add('active');
-  activeTab = id;
-  if (id === 'export') updateExportTab();
+  if(id==='export'){document.getElementById('expMonthName').textContent=D?MONTHS[activeMonth]:'—';}
 }
 
-function updateExportTab() {
-  const mn = D ? MONTHS[activeMonth] : '—';
-  document.getElementById('expMonthName').textContent = mn;
-  if (!D) document.getElementById('noDataMsg').style.display = 'block';
-}
-
-// ── MONTH NAV ──
-function buildMonthNav() {
-  if (!D) return;
-  document.getElementById('mBtns').innerHTML = MONTHS.map((m,i) => {
-    const has = D.monthStats[i].received > 0;
-    return `<button class="m-btn${i===activeMonth?' active':''}${!has?' dim':''}" onclick="setM(${i})">${m}</button>`;
+// MONTH NAV
+function buildMonthNav(){
+  if(!D)return;
+  document.getElementById('mBtns').innerHTML=MONTHS.map((m,i)=>{
+    const has=D.monthStats[i].received>0;
+    return`<button class="m-btn${i===activeMonth?' active':''}${!has?' dim':''}" onclick="setM(${i})">${m}</button>`;
   }).join('');
 }
-function setM(i) {
-  if (!D || i<0 || i>11) return;
-  activeMonth = i;
-  document.querySelectorAll('.m-btn').forEach((b,idx) => b.classList.toggle('active', idx===i));
-  renderDash(); renderMissing();
-  document.getElementById('expMonthName').textContent = MONTHS[i];
-}
-function prevM() { let i=activeMonth-1; while(i>=0&&D.monthStats[i].received===0)i--; if(i>=0)setM(i); }
-function nextM() { let i=activeMonth+1; while(i<12&&D.monthStats[i].received===0)i++; if(i<12)setM(i); }
+function setM(i){if(!D||i<0||i>11)return;activeMonth=i;document.querySelectorAll('.m-btn').forEach((b,idx)=>b.classList.toggle('active',idx===i));renderDash();renderMissing();document.getElementById('expMonthName').textContent=MONTHS[i];}
+function prevM(){let i=activeMonth-1;while(i>=0&&D.monthStats[i].received===0)i--;if(i>=0)setM(i);}
+function nextM(){let i=activeMonth+1;while(i<12&&D.monthStats[i].received===0)i++;if(i<12)setM(i);}
 
-// ── RENDER ──
-function renderAll() { renderDash(); renderMissing(); renderTracking(); renderHeatmap(); renderData(); updateExportTab(); }
+function renderAll(){renderDash();renderMissing();renderTracking();renderHeatmap();renderData();}
 
-function renderDash() {
-  if (!D) return;
-  const s = D.monthStats[activeMonth];
-  document.getElementById('kT').textContent = s.total;
-  document.getElementById('kR').textContent = s.received;
-  document.getElementById('kM').textContent = s.notReceived;
-  document.getElementById('kP').textContent = (s.rate*100).toFixed(1)+'%';
-  const maxR = Math.max(...D.monthStats.map(m=>m.received), 1);
-  document.getElementById('dashBars').innerHTML = D.monthStats.map((m,i) => {
-    const pct = Math.round((m.received/maxR)*100), isA = i===activeMonth;
-    return `<div class="bar-row" style="${isA?'background:rgba(29,158,117,.06);border-radius:5px':''}">
+// ════════════════════════════════════════════
+// renderDash — مع نسبة التزامن
+// ════════════════════════════════════════════
+function renderDash(){
+  if(!D)return;
+  const s=D.monthStats[activeMonth];
+  document.getElementById('kT').textContent=s.total;
+  document.getElementById('kR').textContent=s.received;
+  document.getElementById('kM').textContent=s.notReceived;
+  document.getElementById('kP').textContent=(s.rate*100).toFixed(1)+'%';
+
+  // ✅ بطاقة التزامن الكبيرة
+  const hero=document.getElementById('syncHero');
+  if(D.syncRateMonthly!=null){
+    hero.style.display='flex';
+    document.getElementById('syncHeroVal').textContent=(D.syncRateMonthly*100).toFixed(1)+'%';
+    document.getElementById('syncHeroCount').textContent=D.syncCountMonthly!=null?D.syncCountMonthly:'—';
+    document.getElementById('syncHeroAnnual').textContent=D.syncRateAnnual!=null?(D.syncRateAnnual*100).toFixed(1)+'%':'—';
+  }else{
+    hero.style.display='none';
+  }
+
+  // شريط الاستلام
+  const maxR=Math.max(...D.monthStats.map(m=>m.received),1);
+  document.getElementById('dashBars').innerHTML=D.monthStats.map((m,i)=>{
+    const pct=Math.round((m.received/maxR)*100),isA=i===activeMonth;
+    return`<div class="bar-row" style="${isA?'background:rgba(29,158,117,.06);border-radius:5px':''}">
       <div class="bar-lbl">${m.month.substring(0,4)}</div>
       <div class="bar-track"><div class="bar-fill g" style="width:${pct}%"></div></div>
       <div class="bar-val">${m.received}</div></div>`;
   }).join('');
-  document.getElementById('rateBars').innerHTML = D.monthStats.map((m,i) => {
-    const pct = Math.round(m.rate*100), cls = pct>=70?'g':pct>=40?'am':'r', isA = i===activeMonth;
-    return `<div class="bar-row" style="${isA?'background:rgba(29,158,117,.06);border-radius:5px':''}">
+
+  // ✅ شريط التزامن الشهري
+  const ms=D.monthSyncStats||[];
+  if(ms.length>0){
+    document.getElementById('syncBars').innerHTML=MONTHS.map((mn,i)=>{
+      const row=ms.find(r=>r.month===mn)||{syncRate:0,syncCount:0};
+      const pct=Math.round((row.syncRate||0)*100);
+      const cls=pct>=70?'g':pct>=30?'cy':'r';
+      const isA=i===activeMonth;
+      return`<div class="bar-row" style="${isA?'background:rgba(8,145,178,.06);border-radius:5px':''}">
+        <div class="bar-lbl">${mn.substring(0,4)}</div>
+        <div class="bar-track"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
+        <div class="bar-val">${pct}%</div></div>`;
+    }).join('');
+  }else if(D.syncRateMonthly!=null){
+    document.getElementById('syncBars').innerHTML=`<div style="padding:12px;text-align:center;font-size:12px;color:#0891b2;font-weight:600">🔄 ${(D.syncRateMonthly*100).toFixed(1)}%</div>`;
+  }else{
+    document.getElementById('syncBars').innerHTML=`<div style="padding:12px;text-align:center;font-size:11px;color:var(--tx3)">لا توجد بيانات تزامن</div>`;
+  }
+
+  // شريط التكامل
+  document.getElementById('rateBars').innerHTML=D.monthStats.map((m,i)=>{
+    const pct=Math.round(m.rate*100),cls=pct>=70?'g':pct>=40?'am':'r',isA=i===activeMonth;
+    return`<div class="bar-row" style="${isA?'background:rgba(29,158,117,.06);border-radius:5px':''}">
       <div class="bar-lbl">${m.month.substring(0,4)}</div>
       <div class="bar-track"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
       <div class="bar-val">${pct}%</div></div>`;
   }).join('');
 }
 
-function renderMissing() {
-  if (!D) return;
-  const s = D.monthStats[activeMonth];
-  document.getElementById('mMiss').textContent = s.notReceived;
-  document.getElementById('mRecv').textContent = s.received;
-  document.getElementById('missHd').textContent = `قائمة غير المستلمة — ${s.month} (${s.notReceived} بلدية)`;
-  document.getElementById('missList').innerHTML = s.missList.length
-    ? s.missList.map((n,i) => `<div class="miss-item"><span class="miss-n">${i+1}</span><span class="miss-name">${n}</span><span class="miss-badge">لم ترسل</span></div>`).join('')
-    : '<div style="padding:16px;text-align:center;color:var(--tx2);font-size:13px">✅ جميع البلديات أرسلت</div>';
+function renderMissing(){
+  if(!D)return;
+  const s=D.monthStats[activeMonth];
+  document.getElementById('mMiss').textContent=s.notReceived;
+  document.getElementById('mRecv').textContent=s.received;
+  document.getElementById('missHd').textContent=`قائمة غير المستلمة — ${s.month} (${s.notReceived} بلدية)`;
+  document.getElementById('missList').innerHTML=s.missList.length
+    ?s.missList.map((n,i)=>`<div class="miss-item"><span class="miss-n">${i+1}</span><span class="miss-name">${n}</span><span class="miss-badge">لم ترسل</span></div>`).join('')
+    :'<div style="padding:16px;text-align:center;color:var(--tx2);font-size:13px">✅ جميع البلديات أرسلت</div>';
 }
 
-function renderTracking() {
-  if (!D) return;
-  document.getElementById('trackHead').innerHTML = '<tr>'+D.trackHeaders.map(h=>`<th>${h||''}</th>`).join('')+'</tr>';
-  document.getElementById('trackBody').innerHTML = D.trackRows.map(r =>
-    '<tr>'+D.trackHeaders.map((_,i) => {
-      const v = String(r[i]??'').trim();
-      if (v==='تم'||v==='✓') return `<td><span class="badge ok">✓ تم</span></td>`;
-      if (v==='لم يتم'||v==='✗') return `<td><span class="badge no">✗</span></td>`;
-      const n = parseFloat(v);
-      if (!isNaN(n)&&n>40000) return `<td style="font-size:10px;color:var(--tx2)">${exDate(n)}</td>`;
-      return `<td>${v}</td>`;
+function renderTracking(){
+  if(!D)return;
+  document.getElementById('trackHead').innerHTML='<tr>'+D.trackHeaders.map(h=>`<th>${h||''}</th>`).join('')+'</tr>';
+  document.getElementById('trackBody').innerHTML=D.trackRows.map(r=>
+    '<tr>'+D.trackHeaders.map((_,i)=>{
+      const v=String(r[i]??'').trim();
+      if(v==='تم'||v==='✓')return`<td><span class="badge ok">✓ تم</span></td>`;
+      if(v==='لم يتم'||v==='✗')return`<td><span class="badge no">✗</span></td>`;
+      const n=parseFloat(v);
+      if(!isNaN(n)&&n>40000)return`<td style="font-size:10px;color:var(--tx2)">${exDate(n)}</td>`;
+      return`<td>${v}</td>`;
     }).join('')+'</tr>'
   ).join('');
 }
 
-function renderHeatmap() {
-  if (!D) return;
-  document.getElementById('hmWrap').innerHTML = `<table class="hm">
+function renderHeatmap(){
+  if(!D)return;
+  document.getElementById('hmWrap').innerHTML=`<table class="hm">
     <thead><tr><th style="text-align:right;padding:4px 8px">البلدية</th>
     ${MONTHS.map(m=>`<th>${m.substring(0,2)}</th>`).join('')}<th>∑</th></tr></thead>
     <tbody>${D.hmRows.map(r=>`<tr>
@@ -690,192 +527,118 @@ function renderHeatmap() {
     </tr>`).join('')}</tbody></table>`;
 }
 
-function renderData() {
-  if (!D) return;
-  const mq = D.dataRows.filter(r=>String(r[7]||'').includes('مقبول')).length;
-  const dh = D.dataRows.filter(r=>String(r[7]||'').includes('ضعيف')).length;
-  const nr = D.dataRows.filter(r=>String(r[7]||'').includes('لم يرسل')).length;
-  const avg = (D.dataRows.reduce((s,r)=>s+(parseInt(r[2])||0),0)/Math.max(D.dataRows.length,1)).toFixed(1);
-  document.getElementById('dMq').textContent = mq;
-  document.getElementById('dDh').textContent = dh;
-  document.getElementById('dNr').textContent = nr;
-  document.getElementById('dAvg').textContent = avg;
-  document.getElementById('dataHead').innerHTML = '<tr>'+D.dataHeaders.map(h=>`<th>${h||''}</th>`).join('')+'</tr>';
-  document.getElementById('dataBody').innerHTML = D.dataRows.map(r =>
-    '<tr>'+D.dataHeaders.map((_,i) => {
-      const v = String(r[i]??'').trim();
-      if (v==='مقبول') return `<td><span class="badge mq">مقبول</span></td>`;
-      if (v==='ضعيف')  return `<td><span class="badge dh">ضعيف</span></td>`;
-      if (v==='لم يرسل') return `<td><span class="badge nr">لم يرسل</span></td>`;
-      const n = parseFloat(v);
-      if (!isNaN(n)&&n>0&&n<1&&v.length>4) return `<td>${(n*100).toFixed(1)}%</td>`;
-      return `<td>${v}</td>`;
+function renderData(){
+  if(!D)return;
+  const mq=D.dataRows.filter(r=>String(r[7]||'').includes('مقبول')).length;
+  const dh=D.dataRows.filter(r=>String(r[7]||'').includes('ضعيف')).length;
+  const nr=D.dataRows.filter(r=>String(r[7]||'').includes('لم يرسل')).length;
+  const avg=(D.dataRows.reduce((s,r)=>s+(parseInt(r[2])||0),0)/Math.max(D.dataRows.length,1)).toFixed(1);
+  document.getElementById('dMq').textContent=mq;
+  document.getElementById('dDh').textContent=dh;
+  document.getElementById('dNr').textContent=nr;
+  // ✅ عرض نسبة التزامن السنوي في تبويب البيانات
+  document.getElementById('dSync').textContent=D.syncRateAnnual!=null?(D.syncRateAnnual*100).toFixed(1)+'%':'—';
+
+  document.getElementById('dataHead').innerHTML='<tr>'+D.dataHeaders.map(h=>`<th>${h||''}</th>`).join('')+'</tr>';
+  document.getElementById('dataBody').innerHTML=D.dataRows.map(r=>
+    '<tr>'+D.dataHeaders.map((_,i)=>{
+      const v=String(r[i]??'').trim();
+      if(v==='مقبول')return`<td><span class="badge mq">مقبول</span></td>`;
+      if(v==='ضعيف')return`<td><span class="badge dh">ضعيف</span></td>`;
+      if(v==='لم يرسل')return`<td><span class="badge nr">لم يرسل</span></td>`;
+      const n=parseFloat(v);
+      if(!isNaN(n)&&n>0&&n<1&&v.length>4)return`<td>${(n*100).toFixed(1)}%</td>`;
+      return`<td>${v}</td>`;
     }).join('')+'</tr>'
   ).join('');
 }
 
-// ── EXPORT ──
-function exportOriginal() {
-  if (!rawFileBase64) { showToast('الملف الأصلي غير متوفر', true); return; }
-  try {
-    const bin = atob(rawFileBase64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i=0; i<bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = rawFileName;
-    document.body.appendChild(a); a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+// EXPORT
+function exportOriginal(){
+  if(!rawFileBase64){showToast('الملف غير متوفر',true);return;}
+  try{
+    const bin=atob(rawFileBase64),bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+    const blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=rawFileName;document.body.appendChild(a);a.click();document.body.removeChild(a);
     showToast('✅ تم تصدير الملف الأصلي');
-  } catch(e) { showToast('خطأ في التصدير: '+e.message, true); }
+  }catch(e){showToast('خطأ: '+e.message,true);}
 }
 
-function exportCustom(type) {
-  if (!D) { showToast('لا توجد بيانات للتصدير', true); return; }
-  const wb = XLSX.utils.book_new();
-
-  if (type === 'month') {
-    const s = D.monthStats[activeMonth];
-    const data = [
-      ['لوحة متابعة التطعيم الوطني 2026'],
-      ['شهر: '+s.month, '', 'تاريخ التصدير: '+new Date().toLocaleDateString('ar-LY')],[''],
-      ['#','البلدية','الحالة'],
-      ...D.municipalities.map((m,i) => [i+1, m, s.missList.includes(m)?'لم تستلم':'✓ تم الاستلام'])
+function exportCustom(type){
+  if(!D){showToast('لا توجد بيانات',true);return;}
+  const wb=XLSX.utils.book_new();
+  if(type==='month'){
+    const s=D.monthStats[activeMonth];
+    const ms=D.monthSyncStats?.find(r=>r.month===s.month);
+    const data=[['لوحة متابعة التطعيم 2026'],['شهر: '+s.month],[''],['#','البلدية','الحالة'],
+      ...D.municipalities.map((m,i)=>[i+1,m,s.missList.includes(m)?'لم تستلم':'✓ تم']),
+      [''],['نسبة التكامل',(s.rate*100).toFixed(1)+'%'],
+      ['نسبة التزامن',ms?((ms.syncRate||0)*100).toFixed(1)+'%':'—']
     ];
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    ws['!cols'] = [{wch:5},{wch:25},{wch:16}];
-    XLSX.utils.book_append_sheet(wb, ws, 'الشهر الحالي');
-    XLSX.writeFile(wb, `متابعة_${s.month}_2026.xlsx`);
+    const ws=XLSX.utils.aoa_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb,ws,'الشهر الحالي');
+    XLSX.writeFile(wb,`متابعة_${s.month}_2026.xlsx`);
   }
-
-  if (type === 'missing') {
-    const data = [['شهر','الإجمالي','المستلمة','غير المستلمة','نسبة التكامل','قائمة غير المستلمة']];
-    D.monthStats.forEach(s => {
-      if (s.total>0) data.push([s.month, s.total, s.received, s.notReceived, (s.rate*100).toFixed(1)+'%', s.missList.join(' / ')]);
+  if(type==='missing'){
+    const data=[['شهر','المستلمة','غير المستلمة','التكامل','التزامن','قائمة غير المستلمة']];
+    D.monthStats.forEach((s,i)=>{
+      if(s.total>0){
+        const ms=D.monthSyncStats?.[i];
+        data.push([s.month,s.received,s.notReceived,(s.rate*100).toFixed(1)+'%',ms?((ms.syncRate||0)*100).toFixed(1)+'%':'—',s.missList.join(' / ')]);
+      }
     });
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    ws['!cols'] = [{wch:10},{wch:10},{wch:10},{wch:16},{wch:14},{wch:80}];
-    XLSX.utils.book_append_sheet(wb, ws, 'غير المستلمة');
-    XLSX.writeFile(wb, 'البلديات_غير_المستلمة_2026.xlsx');
+    const ws=XLSX.utils.aoa_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb,ws,'غير المستلمة');
+    XLSX.writeFile(wb,'غير_المستلمة_2026.xlsx');
   }
-
-  if (type === 'heatmap') {
-    const hdr = ['البلدية',...MONTHS,'المجموع'];
-    const data = [hdr, ...D.hmRows.map(r=>[r.name,...r.months,r.total])];
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    ws['!cols'] = [{wch:22},...MONTHS.map(()=>({wch:6})),{wch:10}];
-    XLSX.utils.book_append_sheet(wb, ws, 'الخريطة الحرارية');
-    XLSX.writeFile(wb, 'الخريطة_الحرارية_2026.xlsx');
+  if(type==='heatmap'){
+    const ws=XLSX.utils.aoa_to_sheet([['البلدية',...MONTHS,'المجموع'],...D.hmRows.map(r=>[r.name,...r.months,r.total])]);
+    XLSX.utils.book_append_sheet(wb,ws,'الخريطة الحرارية');
+    XLSX.writeFile(wb,'الخريطة_الحرارية_2026.xlsx');
   }
-
-  if (type === 'full') {
-    const sum = [
-      ['ملخص لوحة متابعة التطعيم الوطني 2026'],[''],
-      ['الشهر','الإجمالي','المستلمة','غير المستلمة','نسبة التكامل'],
-      ...D.monthStats.filter(s=>s.total>0).map(s=>[s.month,s.total,s.received,s.notReceived,(s.rate*100).toFixed(1)+'%'])
+  if(type==='full'){
+    // ورقة ملخص مع التزامن
+    const sum=[['ملخص التطعيم 2026'],[''],
+      ['الشهر','المستلمة','غير المستلمة','التكامل','المتزامنون','التزامن'],
+      ...D.monthStats.filter(s=>s.total>0).map((s,i)=>{
+        const ms=D.monthSyncStats?.[i];
+        return[s.month,s.received,s.notReceived,(s.rate*100).toFixed(1)+'%',ms?.syncCount??'—',ms?((ms.syncRate||0)*100).toFixed(1)+'%':'—'];
+      })
     ];
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sum), 'الملخص');
-    const trk = [D.trackHeaders, ...D.trackRows];
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(trk), 'المتابعة');
-    const hm = [['البلدية',...MONTHS,'المجموع'], ...D.hmRows.map(r=>[r.name,...r.months,r.total])];
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(hm), 'الخريطة الحرارية');
-    const dt = [D.dataHeaders, ...D.dataRows];
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(dt), 'البيانات');
-    XLSX.writeFile(wb, 'تقرير_التطعيم_الكامل_2026.xlsx');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sum),'الملخص');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([D.trackHeaders,...D.trackRows]),'المتابعة');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['البلدية',...MONTHS,'المجموع'],...D.hmRows.map(r=>[r.name,...r.months,r.total])]),'الخريطة الحرارية');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([D.dataHeaders,...D.dataRows]),'البيانات');
+    XLSX.writeFile(wb,'تقرير_التطعيم_2026.xlsx');
   }
-
   showToast('✅ تم تصدير الملف');
 }
 
-// ── تحميل قالب Excel للموظفين ──
-function downloadTemplate() {
-  const wb = XLSX.utils.book_new();
-
-  // ورقة المتابعة
-  const trackHdr = ['البلدية'];
-  MONTHS.forEach(m => { trackHdr.push('استلام '+m); trackHdr.push('تاريخ '+m); });
-  const municipalities = [
-    'السواني','السائح','الزويتينة','الزنتان','الرياينة','الرحيبات','الجغبوب',
-    'البيضان','الابيار','اجخرة','ابوسليم','بنغازي','الجفارة','المشاشية','المرج',
-    'الماية','القلعة','القره بوللي','العجيلات','الشرقية','الشاطئ','رقدالين',
-    'درنة','درج','خليج السدرة','جردي السيد','جالو','اوجلة','توكرة','تاورغاء',
-    'تازربو','تاجوراء','بئر الاشهب','ككلة','قصر الخيار','قصر بن غشير','غريان',
-    'غدامس','عين زارة','صرمان','صبراتة','شحات','سوق الجمعة','يفرن','نسمة',
-    'مسلاتة','الغريفة','مزدة','مرادة','الاصابعة','طرابلس المركز','امساعد',
-    'كاباو','جنزور','الرجبان','جادو','زليتن','الخمس','مصراته','ام الرزم',
-    'سلوق','البيضاء','الابرق','الجميل','الشويرف','ساحل الاخضر','قمينيس',
-    'سرت','اجدابيا','سبها','البريقة','الزاوية المركز','مرزق','القبه',
-    'وادي عتبة','تراغن','زوارة','ترهونه','اسبيعة','الجفرة','نالوت','زلطن',
-    'القطرون','حرابة','غات','ظاهر الجبل','القيقب','سيناون','تيناي','المردوم',
-    'زاوية الجنوبية','باطن الجبل','الحوامد','ربيانة','حي الاندلس','الكفرة',
-    'الزاوية الغربية','بني وليد','وادي الاجال','سوق الخميس','طبرق'
-  ];
-  const trackData = [
-    ['لوحة متابعة التطعيم الوطني 2026 — قالب الرفع'],
-    ['التعليمات: اكتب "تم" أو "✓" في خلية الاستلام، والتاريخ في الخلية المجاورة'],
-    trackHdr,
-    ...municipalities.map(m => [m, ...Array(24).fill('')])
-  ];
-  const ws1 = XLSX.utils.aoa_to_sheet(trackData);
-  ws1['!cols'] = [{wch:22}, ...Array(24).fill({wch:12})];
-  XLSX.utils.book_append_sheet(wb, ws1, 'المتابعة');
-
-  // ورقة الخريطة الحرارية
-  const hmHdr = ['البلدية', ...MONTHS, 'المجموع'];
-  const hmData = [
-    ['الخريطة الحرارية — يُحسب تلقائياً من ورقة المتابعة'],
-    [''],
-    hmHdr,
-    ...municipalities.map(m => [m, ...Array(13).fill('')])
-  ];
-  const ws2 = XLSX.utils.aoa_to_sheet(hmData);
-  ws2['!cols'] = [{wch:22}, ...Array(13).fill({wch:8})];
-  XLSX.utils.book_append_sheet(wb, ws2, 'الخريطة الحرارية');
-
-  // ورقة البيانات
-  const dataHdr = ['#','البلدية','عدد الأشهر المستلمة','نسبة التكامل السنوي','عدد الأشهر المتزامنة','نسبة التزامن','ملاحظات','التصنيف'];
-  const dtData = [
-    ['البيانات السنوية'],[''],
-    dataHdr,
-    ...municipalities.map((m,i) => [i+1, m, ...Array(6).fill('')])
-  ];
-  const ws3 = XLSX.utils.aoa_to_sheet(dtData);
-  ws3['!cols'] = [{wch:5},{wch:22},{wch:20},{wch:18},{wch:22},{wch:16},{wch:20},{wch:12}];
-  XLSX.utils.book_append_sheet(wb, ws3, 'البيانات');
-
-  XLSX.writeFile(wb, 'قالب_لوحة_المتابعة_2026.xlsx');
+function downloadTemplate(){
+  const wb=XLSX.utils.book_new();
+  const mun=['السواني','السائح','الزويتينة','الزنتان','الرياينة','الرحيبات','الجغبوب','البيضان','الابيار','اجخرة','ابوسليم','بنغازي','الجفارة','المشاشية','المرج','الماية','القلعة','القره بوللي','العجيلات','الشرقية','الشاطئ','رقدالين','درنة','درج','خليج السدرة','جردي السيد','جالو','اوجلة','توكرة','تاورغاء','تازربو','تاجوراء','بئر الاشهب','ككلة','قصر الخيار','قصر بن غشير','غريان','غدامس','عين زارة','صرمان','صبراتة','شحات','سوق الجمعة','يفرن','نسمة','مسلاتة','الغريفة','مزدة','مرادة','الاصابعة','طرابلس المركز','امساعد','كاباو','جنزور','الرجبان','جادو','زليتن','الخمس','مصراته','ام الرزم','سلوق','البيضاء','الابرق','الجميل','الشويرف','ساحل الاخضر','قمينيس','سرت','اجدابيا','سبها','البريقة','الزاوية المركز','مرزق','القبه','وادي عتبة','تراغن','زوارة','ترهونه','اسبيعة','الجفرة','نالوت','زلطن','القطرون','حرابة','غات','ظاهر الجبل','القيقب','سيناون','تيناي','المردوم','زاوية الجنوبية','باطن الجبل','الحوامد','ربيانة','حي الاندلس','الكفرة','الزاوية الغربية','بني وليد','وادي الاجال','سوق الخميس','طبرق'];
+  const hdr=['البلدية'];MONTHS.forEach(m=>{hdr.push('استلام '+m);hdr.push('تاريخ '+m);});
+  const ws=XLSX.utils.aoa_to_sheet([['قالب المتابعة 2026'],['اكتب "تم" في خلية الاستلام'],hdr,...mun.map(m=>[m,...Array(24).fill('')])]);
+  XLSX.utils.book_append_sheet(wb,ws,'المتابعة');
+  XLSX.writeFile(wb,'قالب_2026.xlsx');
   showToast('✅ تم تحميل القالب');
 }
 
-// ── HELPERS ──
-function exDate(n) { const d=new Date((n-25569)*86400*1000); return `${d.getDate()}/${d.getMonth()+1}`; }
-
-function showToast(msg, bad=false) {
-  let t = document.querySelector('.toast');
-  if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); }
-  t.className = 'toast' + (bad?' bad':'');
-  t.textContent = msg;
-  t.style.display = 'block';
-  clearTimeout(t._tm);
-  t._tm = setTimeout(() => t.style.display='none', 2800);
+function exDate(n){const d=new Date((n-25569)*86400*1000);return`${d.getDate()}/${d.getMonth()+1}`;}
+function showToast(msg,bad=false){
+  let t=document.querySelector('.toast');
+  if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t);}
+  t.className='toast'+(bad?' bad':'');t.textContent=msg;t.style.display='block';
+  clearTimeout(t._tm);t._tm=setTimeout(()=>t.style.display='none',2800);
 }
 
-// ── INIT ──
 setupInstall();
-
-// إظهار بانر الإشعارات إذا لم يُفعَّل
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
-      document.getElementById('notifBanner').classList.add('show');
-    } else if ('Notification' in window && Notification.permission === 'granted') {
-      document.getElementById('notifToggle').classList.add('on');
-      document.getElementById('notifToggle').textContent = '🔔 مفعّل';
-      startBgWatch();
-    }
-  }, 2000);
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    if('Notification' in window&&Notification.permission==='default') document.getElementById('notifBanner').classList.add('show');
+    else if('Notification' in window&&Notification.permission==='granted'){document.getElementById('notifToggle').classList.add('on');document.getElementById('notifToggle').textContent='🔔 مفعّل';}
+  },2000);
 });
 </script>
 </body>
