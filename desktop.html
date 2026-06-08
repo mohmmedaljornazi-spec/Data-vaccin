@@ -88,7 +88,8 @@ html,body{height:100%;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:
 .view{display:none}.view.active{display:block}
 
 /* KPI GRID */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:1300px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 .kpi-card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
 .kpi-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--kc,var(--g))}
@@ -99,6 +100,7 @@ html,body{height:100%;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:
 .kpi-card.r{--kc:var(--r)}.kpi-card.r .kpi-val{color:var(--r)}
 .kpi-card.am{--kc:var(--am)}.kpi-card.am .kpi-val{color:var(--am)}
 .kpi-card.bl{--kc:#0284c7}
+.kpi-card.cy{--kc:#0891b2}.kpi-card.cy .kpi-val{color:#0891b2}
 
 /* CHARTS */
 .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
@@ -275,6 +277,7 @@ table.hm .rl{padding:5px 10px;text-align:right;white-space:nowrap}
             <div class="kpi-card g"><div class="kpi-lbl">✅ المستلمة</div><div class="kpi-val" id="kR">62</div><div class="kpi-sub" id="kRpct">61.4% من الإجمالي</div></div>
             <div class="kpi-card r"><div class="kpi-lbl">❌ غير المستلمة</div><div class="kpi-val" id="kM">39</div><div class="kpi-sub" id="kMpct">38.6% من الإجمالي</div></div>
             <div class="kpi-card am"><div class="kpi-lbl">📈 نسبة التكامل</div><div class="kpi-val" id="kP">61.4%</div><div class="kpi-sub" id="kMonth">شهر مارس</div></div>
+            <div class="kpi-card cy"><div class="kpi-lbl">🔄 نسبة التزامن</div><div class="kpi-val" id="kSync">—</div><div class="kpi-sub" id="kSyncMonth">الشهر المختار</div></div>
           </div>
           <div class="charts-row">
             <div class="chart-card">
@@ -955,6 +958,21 @@ function renderDash(){
   document.getElementById('kMpct').textContent=((s.notReceived/s.total)*100).toFixed(1)+'% من الإجمالي';
   document.getElementById('kP').textContent=(s.rate*100).toFixed(1)+'%';
   document.getElementById('kMonth').textContent='شهر '+s.month;
+
+  // ✅ تحديث نسبة التزامن حسب الشهر المختار
+  const currentSync = D.monthSyncStats?.[activeMonth] || D.monthSyncStats?.[curM] || null;
+  const syncRate = currentSync ? (currentSync.syncRate || 0) : (D.syncRateMonthly ?? null);
+  const syncCount = currentSync ? (currentSync.syncCount ?? null) : (D.syncCountMonthly ?? null);
+
+  if(document.getElementById('kSync')){
+    document.getElementById('kSync').textContent =
+      syncRate != null ? (syncRate * 100).toFixed(1) + '%' : '—';
+  }
+  if(document.getElementById('kSyncMonth')){
+    document.getElementById('kSyncMonth').textContent =
+      'شهر ' + (s.month || MONTHS[activeMonth] || MONTHS[curM] || '');
+  }
+
   const maxR=Math.max(...D.monthStats.map(m=>m.received),1);
   document.getElementById('dashBars').innerHTML=D.monthStats.map((m,i)=>{
     const pct=Math.round((m.received/maxR)*100),isA=i===activeMonth;
