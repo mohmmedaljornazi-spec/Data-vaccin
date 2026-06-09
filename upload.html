@@ -196,7 +196,23 @@ function showSuccess(name,time,D){
   const selSync = selIdx >= 0 ? D.monthSyncStats[selIdx] : null;
   const syncPct = selSync ? (selSync.syncRate*100).toFixed(1)+'%' : '—';
   const annPct  = D.syncRateAnnual != null ? (D.syncRateAnnual*100).toFixed(1)+'%' : '—';
-  document.getElementById('successDetails').innerHTML = `
+  // DEBUG
+  console.log('=== DEBUG v3.0 ===');
+  console.log('selectedMonth:', D.selectedMonth, 'selIdx:', selIdx);
+  console.log('selSync:', selSync);
+  console.log('syncRateMonthly:', D.syncRateMonthly);
+  if(D.monthSyncStats) D.monthSyncStats.forEach((m,i)=>console.log('month['+i+']',m.month,m.syncCount,m.syncRate));
+  // DEBUG مرئي في الصفحة
+  const dbgHtml = `<div style="background:#1e293b;color:#4ade80;padding:10px;border-radius:8px;margin-bottom:10px;font-size:11px;font-family:monospace;direction:ltr;text-align:left">
+    v3.0 DEBUG<br>
+    selectedMonth: ${D.selectedMonth} (idx:${selIdx})<br>
+    syncRateMonthly: ${(D.syncRateMonthly*100).toFixed(1)}%<br>
+    syncCountMonthly: ${D.syncCountMonthly}<br>
+    may_syncRate: ${D.monthSyncStats&&D.monthSyncStats[4]?(D.monthSyncStats[4].syncRate*100).toFixed(1)+'%':'N/A'}<br>
+    may_syncCount: ${D.monthSyncStats&&D.monthSyncStats[4]?D.monthSyncStats[4].syncCount:'N/A'}
+  </div>`;
+
+  document.getElementById('successDetails').innerHTML = dbgHtml + `
     <div class="success-row"><span class="success-lbl">اسم الملف</span><span class="success-val">${name}</span></div>
     <div class="success-row"><span class="success-lbl">وقت الرفع</span><span class="success-val">${time}</span></div>
     <div class="success-row"><span class="success-lbl">عدد البلديات</span><span class="success-val">${D.municipalities.length} بلدية</span></div>
