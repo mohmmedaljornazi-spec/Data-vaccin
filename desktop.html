@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -331,12 +332,17 @@ function normalizeLatestData(val){
   const out = JSON.parse(val.data || '{}');
   out.municipalities = Array.isArray(out.municipalities) ? out.municipalities : [];
   const total = out.municipalities.length || Number(val.municipalities || 0) || 0;
-  if(!Array.isArray(out.monthStats)) out.monthStats = [];
-  if(!Array.isArray(out.monthSyncStats)) out.monthSyncStats = [];
-  const storedSync = Array.isArray(val.monthSyncStats) ? val.monthSyncStats : [];
+  const toArray12 = (x)=>{
+    if(Array.isArray(x)) return x;
+    if(x && typeof x === 'object') return Array.from({length:12},(_,i)=>x[i] || x[String(i)] || null);
+    return [];
+  };
+  out.monthStats = toArray12(out.monthStats);
+  out.monthSyncStats = toArray12(out.monthSyncStats);
+  const storedSync = toArray12(val.monthSyncStats);
   for(let i=0;i<12;i++){
     const st = out.monthStats[i] || {};
-    const sy = storedSync[i] || out.monthSyncStats[i] || {};
+    const sy = out.monthSyncStats[i] || storedSync[i] || {};
     const received = Number(st.received || 0);
     out.monthStats[i] = {
       month: MONTHS[i], idx: i, total: Number(st.total || total),
