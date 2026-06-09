@@ -264,10 +264,10 @@ function parseWb(wb){
     if(!value && value !== 0) return null;
 
     if(type === 'd'){
-      // Date object مباشرة
+      // Date object — يجب استخدام UTC لتجنب اختلاف الـ timezone
       const dt = value instanceof Date ? value : new Date(value);
       if(isNaN(dt.getTime())) return null;
-      return { month: dt.getMonth()+1, day: dt.getDate() };
+      return { month: dt.getUTCMonth()+1, day: dt.getUTCDate() };
     }
 
     if(type === 'n'){
