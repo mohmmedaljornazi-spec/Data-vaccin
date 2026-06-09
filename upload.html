@@ -9,7 +9,13 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--g:#1d9e75;--g2:#0f6e56;--gbg:#e1f5ee;--gbd:#9fe1cb;--r:#e24b4a;--rbg:#fcebeb;--am:#ba7517;--ambg:#faeeda;--ambd:#fac775;--navy:#0f172a;--bg:#f0fdf4;--card:#fff;--surf:#f1f5f9;--tx:#0f172a;--tx2:#64748b;--tx3:#94a3b8;--bd:rgba(0,0,0,0.08)}
+:root{
+  --g:#1d9e75;--g2:#0f6e56;--gbg:#e1f5ee;--gbd:#9fe1cb;
+  --r:#e24b4a;--rbg:#fcebeb;
+  --am:#ba7517;--ambg:#faeeda;--ambd:#fac775;
+  --navy:#0f172a;--bg:#f0fdf4;--card:#fff;--surf:#f1f5f9;
+  --tx:#0f172a;--tx2:#64748b;--tx3:#94a3b8;--bd:rgba(0,0,0,0.08)
+}
 html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx)}
 .wrap{max-width:480px;margin:0 auto;padding:20px 16px}
 .header{text-align:center;padding:24px 0 20px}
@@ -90,10 +96,13 @@ html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;backgr
   </div>
   <div class="footer">لوحة متابعة التطعيم 2026 · رفع الملفات</div>
 </div>
-<script>
-const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-let fbDb=null, uploadHistory=[];
 
+<script>
+const MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو',
+                'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+let fbDb = null, uploadHistory = [];
+
+// ── Firebase ──
 (function(){
   try{
     firebase.initializeApp({
@@ -102,134 +111,135 @@ let fbDb=null, uploadHistory=[];
       databaseURL:"https://tatveem2026-default-rtdb.firebaseio.com",
       authDomain:"tatveem2026.firebaseapp.com"
     });
-    fbDb=firebase.database();
-    fbDb.ref('.info/connected').on('value',snap=>{
+    fbDb = firebase.database();
+    fbDb.ref('.info/connected').on('value', snap => {
       if(snap.val()){
-        document.getElementById('statusBar').className='status-bar ok';
-        document.getElementById('statusDot').innerHTML='<span class="dot"></span>';
-        document.getElementById('statusTxt').textContent='متصل · جاهز للرفع';
+        document.getElementById('statusBar').className = 'status-bar ok';
+        document.getElementById('statusDot').innerHTML = '<span class="dot"></span>';
+        document.getElementById('statusTxt').textContent = 'متصل · جاهز للرفع';
         loadHistory();
       } else {
-        document.getElementById('statusBar').className='status-bar err';
-        document.getElementById('statusDot').textContent='❌';
-        document.getElementById('statusTxt').textContent='انقطع الاتصال...';
+        document.getElementById('statusBar').className = 'status-bar err';
+        document.getElementById('statusDot').textContent = '❌';
+        document.getElementById('statusTxt').textContent = 'انقطع الاتصال...';
       }
     });
-  }catch(e){
-    document.getElementById('statusBar').className='status-bar err';
-    document.getElementById('statusTxt').textContent='خطأ في الاتصال';
+  } catch(e){
+    document.getElementById('statusBar').className = 'status-bar err';
+    document.getElementById('statusTxt').textContent = 'خطأ في الاتصال';
   }
 })();
 
-function dov(e){e.preventDefault();document.getElementById('dz').classList.add('drag')}
-function dol(e){document.getElementById('dz').classList.remove('drag')}
-function dop(e){e.preventDefault();dol(e);const f=e.dataTransfer.files[0];if(f)procFile(f)}
-function loadFile(e){const f=e.target.files[0];if(f)procFile(f);e.target.value=''}
+// ── Drag & Drop ──
+function dov(e){ e.preventDefault(); document.getElementById('dz').classList.add('drag'); }
+function dol(e){ document.getElementById('dz').classList.remove('drag'); }
+function dop(e){ e.preventDefault(); dol(e); const f = e.dataTransfer.files[0]; if(f) procFile(f); }
+function loadFile(e){ const f = e.target.files[0]; if(f) procFile(f); e.target.value = ''; }
 
+// ── Process File ──
 function procFile(file){
-  document.getElementById('dz').style.display='none';
-  document.getElementById('successCard').style.display='none';
-  const pc=document.getElementById('progCard');
-  pc.style.display='block';
-  setP(10,'جاري قراءة الملف...');
-  const rd=new FileReader();
-  rd.onload=e=>{
+  document.getElementById('dz').style.display = 'none';
+  document.getElementById('successCard').style.display = 'none';
+  const pc = document.getElementById('progCard');
+  pc.style.display = 'block';
+  setP(10, 'جاري قراءة الملف...');
+
+  const rd = new FileReader();
+  rd.onload = e => {
     try{
-      setP(30,'جاري تحليل البيانات...');
-      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array',cellDates:true});
-      const D=parseWb(wb);
-      const fileBase64=arrayToBase64(e.target.result);
-      setP(60,'جاري الإرسال للمدير...');
-      const t=nowT();
-      const activeMonth=D.monthStats.findIndex(m=>m.received>0);
-      const activeMonths=D.monthStats.filter(m=>m.received>0).length;
+      setP(30, 'جاري تحليل البيانات...');
+      // cellDates:true → تواريخ حقيقية | raw:false → نصوص كما هي
+      const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array', cellDates:true, raw:false});
+      const D  = parseWb(wb);
+      const fileBase64 = arrayToBase64(e.target.result);
+
+      setP(60, 'جاري الإرسال للمدير...');
+      const t = nowT();
+      const activeMonth  = D.monthStats.findIndex(m => m.received > 0);
+      const activeMonths = D.monthStats.filter(m => m.received > 0).length;
+
       if(fbDb){
         fbDb.ref('tatveem/latest').set({
-          data:JSON.stringify(D),
-          uploadTime:t,
-          activeMonth:activeMonth>=0?activeMonth:0,
-          fileName:file.name,
-          fileBase64:fileBase64,
-          fileSize:file.size,
-          municipalities:D.municipalities.length,
+          data:             JSON.stringify(D),
+          uploadTime:       t,
+          activeMonth:      activeMonth >= 0 ? activeMonth : 0,
+          fileName:         file.name,
+          fileBase64:       fileBase64,
+          fileSize:         file.size,
+          municipalities:   D.municipalities.length,
           activeMonths,
-          uploadedBy:'موظف',
+          uploadedBy:       'موظف',
           syncRateMonthly:  D.syncRateMonthly,
           syncRateAnnual:   D.syncRateAnnual,
           syncCountMonthly: D.syncCountMonthly,
           monthSyncStats:   D.monthSyncStats
-        }).then(()=>{
-          setP(100,'✅ تم الإرسال بنجاح!');
+        }).then(() => {
+          setP(100, '✅ تم الإرسال بنجاح!');
           fbDb.ref('tatveem/notification').set({
-            title:'💉 تحديث جديد — لوحة التطعيم',
-            body:'رُفع ملف: '+file.name+' · '+t,
-            time:t,ts:Date.now(),source:'upload'
+            title: '💉 تحديث جديد — لوحة التطعيم',
+            body:  'رُفع ملف: ' + file.name + ' · ' + t,
+            time: t, ts: Date.now(), source: 'upload'
           });
-          const h={name:file.name,time:t,mun:D.municipalities.length};
+          const h = {name: file.name, time: t, mun: D.municipalities.length};
           uploadHistory.unshift(h);
-          if(uploadHistory.length>5) uploadHistory.pop();
+          if(uploadHistory.length > 5) uploadHistory.pop();
           fbDb.ref('tatveem/history').set(uploadHistory);
-          setTimeout(()=>{
-            pc.style.display='none';
-            showSuccess(file.name,t,D);
-          },800);
-        }).catch(err=>{
-          setP(0,'❌ خطأ: '+err.message);
-          setTimeout(()=>resetUpload(),3000);
+          setTimeout(() => { pc.style.display='none'; showSuccess(file.name, t, D); }, 800);
+        }).catch(err => {
+          setP(0, '❌ خطأ: ' + err.message);
+          setTimeout(resetUpload, 3000);
         });
       } else {
-        setP(0,'❌ غير متصل');
-        setTimeout(()=>resetUpload(),2000);
+        setP(0, '❌ غير متصل');
+        setTimeout(resetUpload, 2000);
       }
-    }catch(err){
-      setP(0,'❌ خطأ في القراءة: '+err.message);
-      setTimeout(()=>resetUpload(),2000);
+    } catch(err){
+      setP(0, '❌ خطأ في القراءة: ' + err.message);
+      setTimeout(resetUpload, 2000);
     }
   };
   rd.readAsArrayBuffer(file);
 }
 
-function setP(pct,lbl){
-  document.getElementById('progFill').style.width=pct+'%';
-  document.getElementById('progTitle').textContent=lbl;
+function setP(pct, lbl){
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progTitle').textContent = lbl;
 }
 
-function showSuccess(name,time,D){
-  const selM   = D.selectedMonth || '—';
-  const selIdx = MONTHS.indexOf(selM);
-  const selSync= selIdx>=0 ? D.monthSyncStats[selIdx] : null;
-  const syncPct= selSync ? (selSync.syncRate*100).toFixed(1)+'%' : '—';
-  const annPct = D.syncRateAnnual!=null ? (D.syncRateAnnual*100).toFixed(1)+'%' : '—';
-  document.getElementById('successDetails').innerHTML=`
+function showSuccess(name, time, D){
+  const selIdx  = MONTHS.indexOf(D.selectedMonth);
+  const selSync = selIdx >= 0 ? D.monthSyncStats[selIdx] : null;
+  const syncPct = selSync ? (selSync.syncRate * 100).toFixed(1) + '%' : '—';
+  const annPct  = D.syncRateAnnual != null ? (D.syncRateAnnual * 100).toFixed(1) + '%' : '—';
+  document.getElementById('successDetails').innerHTML = `
     <div class="success-row"><span class="success-lbl">اسم الملف</span><span class="success-val">${name}</span></div>
     <div class="success-row"><span class="success-lbl">وقت الرفع</span><span class="success-val">${time}</span></div>
     <div class="success-row"><span class="success-lbl">عدد البلديات</span><span class="success-val">${D.municipalities.length} بلدية</span></div>
     <div class="success-row"><span class="success-lbl">الأشهر المكتملة</span><span class="success-val">${D.monthStats.filter(m=>m.received>0).length} شهر</span></div>
     <div class="sync-card">
-      <div class="sync-card-lbl">🔄 نسبة التزامن — ${selM}</div>
+      <div class="sync-card-lbl">🔄 نسبة التزامن — ${D.selectedMonth || '—'}</div>
       <div class="sync-card-val">${syncPct}</div>
-      <div class="sync-card-sub">التزامن السنوي: ${annPct} · ${selSync?selSync.syncCount:0} بلدية متزامنة</div>
-    </div>
-  `;
-  document.getElementById('successCard').style.display='block';
+      <div class="sync-card-sub">التزامن السنوي: ${annPct} · ${selSync ? selSync.syncCount : 0} بلدية متزامنة</div>
+    </div>`;
+  document.getElementById('successCard').style.display = 'block';
   loadHistory();
 }
 
 function resetUpload(){
-  document.getElementById('successCard').style.display='none';
-  document.getElementById('progCard').style.display='none';
-  document.getElementById('dz').style.display='block';
+  document.getElementById('successCard').style.display = 'none';
+  document.getElementById('progCard').style.display    = 'none';
+  document.getElementById('dz').style.display          = 'block';
 }
 
 function loadHistory(){
-  if(!fbDb)return;
-  fbDb.ref('tatveem/history').once('value',snap=>{
-    const h=snap.val();
-    if(!h||!h.length)return;
-    uploadHistory=h;
-    document.getElementById('histCard').style.display='block';
-    document.getElementById('histList').innerHTML=h.map(i=>`
-      <div class="hist-item">
+  if(!fbDb) return;
+  fbDb.ref('tatveem/history').once('value', snap => {
+    const h = snap.val();
+    if(!h || !h.length) return;
+    uploadHistory = h;
+    document.getElementById('histCard').style.display = 'block';
+    document.getElementById('histList').innerHTML = h.map(i =>
+      `<div class="hist-item">
         <div class="hist-dot"></div>
         <div class="hist-name">${i.name}</div>
         <div class="hist-time">${i.time}</div>
@@ -238,48 +248,64 @@ function loadHistory(){
 }
 
 function arrayToBase64(buf){
-  const bytes=new Uint8Array(buf);let b='';const c=8192;
-  for(let i=0;i<bytes.length;i+=c)b+=String.fromCharCode(...bytes.subarray(i,Math.min(i+c,bytes.length)));
+  const bytes = new Uint8Array(buf); let b = ''; const c = 8192;
+  for(let i = 0; i < bytes.length; i += c)
+    b += String.fromCharCode(...bytes.subarray(i, Math.min(i+c, bytes.length)));
   return btoa(b);
 }
 
-// ══════════════════════════════════════════════════════════════
-// parseWb
-// قاعدة التزامن: أرسل في اليوم 5 أو 6 من الشهر التالي
-// مثال: مارس → يُعتبر متزامناً إذا كان تاريخ الإرسال 5 أو 6 أبريل
-// ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+//  parseWb
+//
+//  قاعدة التزامن (مطابقة للإكسل المُصلَح):
+//  الشهر i متزامن إذا كان تاريخ إرساله في اليوم 5 أو 6
+//  من الشهر (i+2)  — أي الشهر الذي يلي شهر التقرير.
+//
+//  مثال: مارس (i=2) → يُقبل إذا كان التاريخ 5 أو 6 أبريل (شهر 4)
+//        أبريل (i=3) → يُقبل إذا كان التاريخ 5 أو 6 مايو  (شهر 5)
+//        مايو  (i=4) → يُقبل إذا كان التاريخ 5 أو 6 يونيو (شهر 6)
+// ══════════════════════════════════════════════════════════════════
 function parseWb(wb){
-  const d={};
+  const d = {};
 
   // ── شيت المتابعة ──
-  const wsT = wb.Sheets['المتابعة'];
-  const rawT = wsT ? XLSX.utils.sheet_to_json(wsT,{header:1,defval:'',raw:false}) : [];
-  d.trackHeaders = rawT[2] || [];
-  d.trackRows    = rawT.slice(3).filter(r=>r[0]&&String(r[0]).trim());
-  d.municipalities = d.trackRows.map(r=>String(r[0]).trim());
-  const total = d.municipalities.length;
+  const wsT  = wb.Sheets['المتابعة'];
+  // raw:false يجعل SheetJS يُرجع قيم الخلايا كنصوص حيث الأرقام كـ strings
+  // لكن cellDates:true يُرجع التواريخ كـ Date objects مباشرة
+  const rawT = wsT ? XLSX.utils.sheet_to_json(wsT, {header:1, defval:''}) : [];
+  d.trackHeaders   = rawT[2] || [];
+  d.trackRows      = rawT.slice(3).filter(r => r[0] && String(r[0]).trim());
+  d.municipalities = d.trackRows.map(r => String(r[0]).trim());
+  const total      = d.municipalities.length;
 
-  // دالة: استخرج الشهر واليوم من قيمة الخلية
-  // تُرجع {month: 1-12, day: 1-31} أو null
+  // ── دالة استخراج الشهر واليوم من أي تنسيق ──
   function getMonthDay(val){
-    if(!val && val!==0) return null;
+    if(val == null || val === '') return null;
+
+    // Date object (من cellDates:true)
     if(val instanceof Date){
-      return {month: val.getMonth()+1, day: val.getDate()};
+      if(isNaN(val.getTime())) return null;
+      return { month: val.getMonth() + 1, day: val.getDate() };
     }
+
     const s = String(val).trim();
     if(!s) return null;
-    // ISO: 2026-04-05
+
+    // ISO: 2026-04-05T... أو 2026-04-05
     const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if(iso) return {month: parseInt(iso[2],10), day: parseInt(iso[3],10)};
-    // D/M/YYYY أو DD/MM/YYYY
-    const slash = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
-    if(slash) return {month: parseInt(slash[2],10), day: parseInt(slash[1],10)};
-    // Excel serial
+    if(iso) return { month: parseInt(iso[2], 10), day: parseInt(iso[3], 10) };
+
+    // DD/MM/YYYY أو D/M/YYYY
+    const slash = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+    if(slash) return { month: parseInt(slash[2], 10), day: parseInt(slash[1], 10) };
+
+    // Excel serial number
     const n = parseFloat(s);
     if(!isNaN(n) && n > 40000){
-      const dt = new Date(Math.round((n-25569)*86400*1000));
-      return {month: dt.getUTCMonth()+1, day: dt.getUTCDate()};
+      const dt = new Date(Math.round((n - 25569) * 86400 * 1000));
+      return { month: dt.getUTCMonth() + 1, day: dt.getUTCDate() };
     }
+
     return null;
   }
 
@@ -288,19 +314,22 @@ function parseWb(wb){
   d.monthSyncStats = [];
 
   MONTHS.forEach((mn, mi) => {
-    const statusCol = 1 + mi*2;
-    const dateCol   = 2 + mi*2;
-    // الشهر التالي للتزامن
-    const nextMonth = (mi + 2 <= 12) ? mi + 2 : 1;  // mi+1 = الشهر الحالي، mi+2 = التالي
+    const statusCol = 1 + mi * 2;   // B,D,F,H,J,L,...
+    const dateCol   = 2 + mi * 2;   // C,E,G,I,K,M,...
+
+    // الشهر التالي للتحقق منه
+    const nextMonth = mi < 11 ? mi + 2 : 1;   // i=0→2(فبراير) ... i=11→1(يناير)
+    const nextYear  = mi < 11 ? 2026   : 2027;
+
     let recv = 0, onTime = 0;
     const missList = [];
 
     d.trackRows.forEach(r => {
-      const status = String(r[statusCol]||'').trim();
+      const status = String(r[statusCol] || '').trim();
       if(status === 'تم' || status === '✓'){
         recv++;
         const md = getMonthDay(r[dateCol]);
-        // التزامن: يوم 5 أو 6 من الشهر التالي
+        // التزامن: يوم 5 أو 6 من الشهر التالي (nextMonth)
         if(md && md.month === nextMonth && (md.day === 5 || md.day === 6)){
           onTime++;
         }
@@ -311,24 +340,25 @@ function parseWb(wb){
 
     d.monthStats.push({
       month: mn, idx: mi, total,
-      received: recv, notReceived: total-recv,
-      rate: total>0 ? recv/total : 0,
+      received:    recv,
+      notReceived: total - recv,
+      rate:        total > 0 ? recv / total : 0,
       missList
     });
 
     d.monthSyncStats.push({
-      month: mn,
+      month:     mn,
       syncCount: onTime,
-      syncRate:  total>0 ? onTime/total : 0
+      syncRate:  total > 0 ? onTime / total : 0
     });
   });
 
   // ── الشهر المختار من Dashboard B3 ──
-  const wsDash = wb.Sheets['Dashboard'];
   d.selectedMonth = '';
+  const wsDash = wb.Sheets['Dashboard'];
   if(wsDash){
-    const rawDash = XLSX.utils.sheet_to_json(wsDash,{header:1,defval:''});
-    d.selectedMonth = String(rawDash[2]?.[1]||'').trim();
+    const rawD = XLSX.utils.sheet_to_json(wsDash, {header:1, defval:''});
+    d.selectedMonth = String(rawD[2]?.[1] || '').trim();
   }
 
   // نسبة التزامن للشهر المختار
@@ -337,36 +367,44 @@ function parseWb(wb){
     d.syncRateMonthly  = d.monthSyncStats[selIdx].syncRate;
     d.syncCountMonthly = d.monthSyncStats[selIdx].syncCount;
   } else {
-    const last = [...d.monthSyncStats].reverse().find((_,i,a)=>d.monthStats[11-i].received>0);
+    // آخر شهر فيه استلام
+    let last = null;
+    for(let i = 11; i >= 0; i--){
+      if(d.monthStats[i].received > 0){ last = d.monthSyncStats[i]; break; }
+    }
     d.syncRateMonthly  = last ? last.syncRate  : 0;
     d.syncCountMonthly = last ? last.syncCount : 0;
   }
 
-  // نسبة التزامن السنوية
-  const withData = d.monthSyncStats.filter((_,i)=>d.monthStats[i].received>0);
-  d.syncRateAnnual = withData.length>0
-    ? withData.reduce((s,m)=>s+m.syncRate,0)/withData.length
+  // نسبة التزامن السنوية = متوسط الأشهر التي فيها استلام
+  const withData = d.monthSyncStats.filter((_, i) => d.monthStats[i].received > 0);
+  d.syncRateAnnual = withData.length > 0
+    ? withData.reduce((s, m) => s + m.syncRate, 0) / withData.length
     : 0;
 
   // ── شيت الخريطة الحرارية ──
-  const wsH = wb.Sheets['الخريطة الحرارية'];
-  const rawH = wsH ? XLSX.utils.sheet_to_json(wsH,{header:1,defval:''}) : [];
-  d.hmRows = rawH.slice(3).filter(r=>r[0]&&String(r[0]).trim()).map(r=>({
-    name:   String(r[0]).trim(),
-    months: Array.from({length:12},(_,i)=>String(r[i+1]||'').trim()),
-    total:  parseInt(r[13])||0
-  }));
+  const wsH  = wb.Sheets['الخريطة الحرارية'];
+  const rawH = wsH ? XLSX.utils.sheet_to_json(wsH, {header:1, defval:''}) : [];
+  d.hmRows = rawH.slice(3)
+    .filter(r => r[0] && String(r[0]).trim())
+    .map(r => ({
+      name:   String(r[0]).trim(),
+      months: Array.from({length:12}, (_, i) => String(r[i+1] || '').trim()),
+      total:  parseInt(r[13]) || 0
+    }));
 
   // ── شيت البيانات ──
-  const wsD = wb.Sheets['البيانات'];
-  const rawD = wsD ? XLSX.utils.sheet_to_json(wsD,{header:1,defval:''}) : [];
-  d.dataHeaders = rawD[2] || [];
-  d.dataRows    = rawD.slice(3).filter(r=>r[1]&&String(r[1]).trim());
+  const wsData  = wb.Sheets['البيانات'];
+  const rawData = wsData ? XLSX.utils.sheet_to_json(wsData, {header:1, defval:''}) : [];
+  d.dataHeaders = rawData[2] || [];
+  d.dataRows    = rawData.slice(3).filter(r => r[1] && String(r[1]).trim());
 
   return d;
 }
 
-function nowT(){return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function nowT(){
+  return new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+}
 </script>
 </body>
 </html>
