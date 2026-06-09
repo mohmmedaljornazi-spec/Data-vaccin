@@ -1,4 +1,4 @@
-<!-- upload.html v3.0 - sync fix 2026-06-09 -->
+<!-- upload.html v4.0 MAY-DASHBOARD-FIX - sync fix 2026-06-09 -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -362,6 +362,53 @@ function parseWb(wb){
     return null;
   }
 
+
+  // قراءة الجدول الموجود في Dashboard مباشرة لأنه يحتوي على القيم النهائية الصحيحة من Excel
+  function applyDashboardMonthlyTable(wsDash){
+    if(!wsDash) return;
+    function normMonth(v){
+      return String(v || '').replace(/[\u064B-\u065F\u0670]/g,'').replace(/\s+/g,'').trim();
+    }
+    function toNum(v){
+      if(v == null || v === '') return 0;
+      if(typeof v === 'number') return isFinite(v) ? v : 0;
+      let s = String(v).trim().replace('%','').replace(/,/g,'.');
+      let n = parseFloat(s);
+      if(!isFinite(n)) return 0;
+      return n > 1 ? n / 100 : n;
+    }
+    function cell(row,col){
+      const c = wsDash[XLSX.utils.encode_cell({r:row,c:col})];
+      return c ? c.v : null;
+    }
+    // ابحث عن صف كلمة الشهر ثم اقرأ 12 صفاً بعدها
+    let headerRow = -1;
+    const range = XLSX.utils.decode_range(wsDash['!ref'] || 'A1:E40');
+    for(let r=range.s.r; r<=range.e.r; r++){
+      if(normMonth(cell(r,0)) === 'الشهر'){ headerRow = r; break; }
+    }
+    if(headerRow < 0) return;
+    for(let r=headerRow+1; r<=Math.min(headerRow+12, range.e.r); r++){
+      const idx = MONTHS.findIndex(m => normMonth(m) === normMonth(cell(r,0)));
+      if(idx < 0) continue;
+      const received = Math.round(toNum(cell(r,1)) * (String(cell(r,1)).includes('%') ? (d.municipalities.length||0) : 1));
+      const integRate = toNum(cell(r,2));
+      const syncCount = Math.round(toNum(cell(r,3)) * (String(cell(r,3)).includes('%') ? (d.municipalities.length||0) : 1));
+      const syncRate  = toNum(cell(r,4));
+      const totalRows = d.municipalities.length || (d.monthStats[idx] ? d.monthStats[idx].total : 0) || 0;
+      if(d.monthStats[idx]){
+        d.monthStats[idx].received = received;
+        d.monthStats[idx].notReceived = Math.max(0, totalRows - received);
+        d.monthStats[idx].rate = integRate;
+        d.monthStats[idx].total = totalRows;
+      }
+      if(d.monthSyncStats[idx]){
+        d.monthSyncStats[idx].syncCount = syncCount;
+        d.monthSyncStats[idx].syncRate = syncRate;
+      }
+    }
+  }
+
   // ── شيت المتابعة ──
   const wsT = wb.Sheets['المتابعة'];
   if(!wsT){ d.trackHeaders=[]; d.trackRows=[]; d.municipalities=[]; }
@@ -431,21 +478,22 @@ function parseWb(wb){
     if(b3) d.selectedMonth = String(b3.v || '').trim();
   }
 
+  // اقرأ القيم النهائية من جدول Dashboard، وهذا يحل مشكلة مايو وباقي الأشهر
+  applyDashboardMonthlyTable(wsDash);
+
   // نسبة التزامن للشهر المختار
-  const selIdx = MONTHS.indexOf(d.selectedMonth);
-  if(selIdx >= 0){
-    d.syncRateMonthly  = d.monthSyncStats[selIdx].syncRate;
-    d.syncCountMonthly = d.monthSyncStats[selIdx].syncCount;
-  } else {
-    let last = null;
+  let selIdx = MONTHS.indexOf(String(d.selectedMonth || '').trim());
+  if(selIdx < 0 || !d.monthStats[selIdx] || d.monthStats[selIdx].received === 0){
+    selIdx = -1;
     for(let i = 11; i >= 0; i--){
-      if(d.monthStats[i].received > 0){ last = d.monthSyncStats[i]; break; }
+      if(d.monthStats[i] && d.monthStats[i].received > 0){ selIdx = i; break; }
     }
-    d.syncRateMonthly  = last ? last.syncRate  : 0;
-    d.syncCountMonthly = last ? last.syncCount : 0;
-    const lastIdx = d.monthStats.findLastIndex ? d.monthStats.findLastIndex(m=>m.received>0) : (()=>{for(let i=11;i>=0;i--){if(d.monthStats[i].received>0)return i;}return -1;})();
-    d.selectedMonth = lastIdx >= 0 ? MONTHS[lastIdx] : MONTHS[0];
+    if(selIdx < 0) selIdx = 0;
+    d.selectedMonth = MONTHS[selIdx];
   }
+  d.activeMonth = selIdx;
+  d.syncRateMonthly  = d.monthSyncStats[selIdx] ? d.monthSyncStats[selIdx].syncRate  : 0;
+  d.syncCountMonthly = d.monthSyncStats[selIdx] ? d.monthSyncStats[selIdx].syncCount : 0;
 
   // نسبة التزامن السنوية
   const withData = d.monthSyncStats.filter((_,i) => d.monthStats[i].received > 0);
@@ -475,7 +523,7 @@ function nowT(){
   return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 // ── تحقق من الإصدار ──
-console.log('%c upload.html v3.0 ✅ الإصدار الصحيح محمّل', 'color:green;font-size:16px;font-weight:bold');
+console.log('%c upload.html v4.0 MAY-DASHBOARD-FIX ✅ الإصدار الصحيح محمّل', 'color:green;font-size:16px;font-weight:bold');
 console.log('إذا رأيت هذا فالكود الجديد يعمل — المشكلة كانت في cache المتصفح');
 </script>
 </body>
