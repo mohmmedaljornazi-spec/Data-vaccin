@@ -245,6 +245,49 @@ table.hm .rl{padding:3px 8px;text-align:right;font-size:10px;white-space:nowrap}
 </div>
 <script>
 const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+function normalizeLatestData(val){
+  const out = JSON.parse(val.data || '{}');
+  out.municipalities = Array.isArray(out.municipalities) ? out.municipalities : [];
+  const total = out.municipalities.length || Number(val.municipalities || 0) || 0;
+  if(!Array.isArray(out.monthStats)) out.monthStats = [];
+  if(!Array.isArray(out.monthSyncStats)) out.monthSyncStats = [];
+  const storedSync = Array.isArray(val.monthSyncStats) ? val.monthSyncStats : [];
+  for(let i=0;i<12;i++){
+    const st = out.monthStats[i] || {};
+    const sy = storedSync[i] || out.monthSyncStats[i] || {};
+    const received = Number(st.received || 0);
+    out.monthStats[i] = {
+      month: MONTHS[i], idx: i, total: Number(st.total || total),
+      received,
+      notReceived: st.notReceived != null ? Number(st.notReceived || 0) : Math.max(0,total-received),
+      rate: st.rate != null ? Number(st.rate || 0) : (total>0 ? received/total : 0),
+      missList: Array.isArray(st.missList) ? st.missList : []
+    };
+    const syncCount = Number(sy.syncCount || 0);
+    out.monthSyncStats[i] = {
+      month: MONTHS[i],
+      syncCount,
+      syncRate: sy.syncRate != null ? Number(sy.syncRate || 0) : (total>0 ? syncCount/total : 0)
+    };
+  }
+  let idx = MONTHS.indexOf(String(out.selectedMonth || '').trim());
+  if(idx < 0 || out.monthStats[idx].received === 0){
+    idx = Number.isInteger(val.activeMonth) ? val.activeMonth : -1;
+    if(idx < 0 || idx > 11 || out.monthStats[idx].received === 0){
+      idx = -1;
+      for(let i=11;i>=0;i--){ if(out.monthStats[i].received > 0){ idx=i; break; } }
+    }
+    if(idx < 0) idx = 0;
+  }
+  out.selectedMonth = MONTHS[idx];
+  out.activeMonth = idx;
+  out.syncRateMonthly = out.monthSyncStats[idx] ? out.monthSyncStats[idx].syncRate : 0;
+  out.syncCountMonthly = out.monthSyncStats[idx] ? out.monthSyncStats[idx].syncCount : 0;
+  out.syncRateAnnual = val.syncRateAnnual != null ? Number(val.syncRateAnnual || 0) : (out.syncRateAnnual || 0);
+  return out;
+}
+
 let D=null, activeMonth=0, rawFileBase64=null, rawFileName='لوحة_المتابعة.xlsx';
 let notifEnabled=false, deferredInstallPrompt=null;
 
@@ -269,17 +312,14 @@ db.ref('tatveem/notification').on('value',snap=>{
 db.ref('tatveem/latest').on('value',snap=>{
   const val=snap.val();if(!val)return;
   try{
-    D=JSON.parse(val.data);
-    // ✅ إصلاح: استخدم الشهر المختار في الإكسل بدل أول شهر فيه بيانات
-    const selIdx=MONTHS.indexOf(D.selectedMonth||'');
-    activeMonth=selIdx>=0?selIdx:(val.activeMonth||0);
+    D=normalizeLatestData(val);
+    activeMonth=D.activeMonth;
     rawFileBase64=val.fileBase64||null;
     rawFileName=val.fileName||'لوحة_المتابعة_2026.xlsx';
 
     D.syncRateMonthly  = val.syncRateMonthly  !=null ? val.syncRateMonthly  : (D.syncRateMonthly||null);
     D.syncRateAnnual   = val.syncRateAnnual   !=null ? val.syncRateAnnual   : (D.syncRateAnnual||null);
     D.syncCountMonthly = val.syncCountMonthly !=null ? val.syncCountMonthly : (D.syncCountMonthly||null);
-    D.monthSyncStats   = val.monthSyncStats   ||       D.monthSyncStats     ||[];
 
     document.getElementById('liveBadge').style.display='flex';
     document.getElementById('lastUpd').textContent='آخر رفع: '+val.uploadTime;
