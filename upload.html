@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -13,7 +14,7 @@
 html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx)}
 .wrap{max-width:480px;margin:0 auto;padding:20px 16px}
 .header{text-align:center;padding:24px 0 20px}
-.header-icon{width:64px;height:64px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px}
+.header-icon{width:64px;height:64px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:font-size:28px;margin:0 auto 12px;align-items:center;justify-content:center;font-size:28px}
 .header-title{font-size:20px;font-weight:600;color:var(--navy);margin-bottom:4px}
 .header-sub{font-size:13px;color:var(--tx2)}
 .status-bar{display:flex;align-items:center;justify-content:center;gap:7px;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;margin-bottom:18px;width:fit-content;margin-left:auto;margin-right:auto}
@@ -40,7 +41,6 @@ html,body{min-height:100vh;font-family:'Segoe UI',Tahoma,Arial,sans-serif;backgr
 .success-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gbg);font-size:12px}
 .success-row:last-child{border-bottom:none}
 .success-lbl{color:var(--tx2)}.success-val{color:var(--navy);font-weight:500}
-/* بطاقة نسبة التزامن */
 .sync-card{background:linear-gradient(135deg,rgba(8,145,178,.1),rgba(8,145,178,.05));border:1px solid rgba(8,145,178,.3);border-radius:12px;padding:14px;margin:12px 0;text-align:center}
 .sync-card-lbl{font-size:11px;color:#0e7490;margin-bottom:4px;font-weight:600}
 .sync-card-val{font-size:32px;font-weight:800;color:#0891b2}
@@ -155,7 +155,6 @@ function procFile(file){
           municipalities:D.municipalities.length,
           activeMonths,
           uploadedBy:'موظف',
-          // ✅ نسبة التزامن مستخرجة من Dashboard مباشرة
           syncRateMonthly:  D.syncRateMonthly,
           syncRateAnnual:   D.syncRateAnnual,
           syncCountMonthly: D.syncCountMonthly,
@@ -244,10 +243,7 @@ function arrayToBase64(buf){
 
 // ════════════════════════════════════════════════════
 // parseWb — يقرأ نسبة التزامن من Dashboard مباشرة
-// البنية المعروفة:
-//   Row 10, Col B  = نسبة التزامن الشهرية (الملخص)
-//   Row 9,  Col B  = عدد المتزامنين الشهري
-//   Rows 15-26     = جدول الأشهر: col A=الشهر, col E=نسبة التزامن
+// الإصلاح: الشهر المختار (B3) يُعاد تصحيحه من B9 وB10
 // ════════════════════════════════════════════════════
 function parseWb(wb){
   const d={};
@@ -284,10 +280,11 @@ function parseWb(wb){
   d.dataRows=rawD.slice(3).filter(r=>r[1]&&String(r[1]).trim());
 
   // ════════════════════════════════════════════════
-  // ✅ استخراج نسبة التزامن من Dashboard
-  // Row 10 col B = نسبة التزامن الشهرية
-  // Row 9  col B = عدد المتزامنين
-  // Rows 15-26: col A=الشهر, col E=نسبة التزامن
+  // ✅ استخراج نسبة التزامن من Dashboard مباشرة
+  // B3  = اسم الشهر المختار
+  // B9  = عدد المتزامنين الشهري  (الصف 9، index 8)
+  // B10 = نسبة التزامن الشهرية   (الصف 10، index 9)
+  // صفوف 15-26 (index 14-25): col A=الشهر، col D=عدد، col E=نسبة
   // ════════════════════════════════════════════════
   d.syncRateMonthly  = null;
   d.syncRateAnnual   = null;
@@ -298,22 +295,22 @@ function parseWb(wb){
   if(wsDash){
     const raw=XLSX.utils.sheet_to_json(wsDash,{header:1,defval:''});
 
-    // Row 10 (index 9) = نسبة التزامن الشهرية — col B (index 1)
+    // اسم الشهر المختار من B3 (index 2, col 1)
+    const selectedMonth = String(raw[2]?.[1]||'').trim();
+
+    // B10 (index 9) = نسبة التزامن الشهرية الصحيحة
     if(raw[9] && raw[9][1]!=null){
       const v=parseFloat(raw[9][1]);
       if(!isNaN(v)) d.syncRateMonthly = v>1 ? v/100 : v;
     }
 
-    // Row 9 (index 8) = عدد المتزامنين — col B (index 1)
+    // B9 (index 8) = عدد المتزامنين الشهري الصحيح
     if(raw[8] && raw[8][1]!=null){
       const v=parseInt(raw[8][1]);
       if(!isNaN(v)) d.syncCountMonthly = v;
     }
 
-    // Rows 15-26 (indices 14-25) = جدول الأشهر الشهري
-    // col A (index 0) = اسم الشهر
-    // col D (index 3) = عدد المتزامن
-    // col E (index 4) = نسبة التزامن
+    // صفوف الجدول الشهري (15-26 → index 14-25)
     for(let i=14;i<=25;i++){
       const row=raw[i];
       if(!row) continue;
@@ -324,6 +321,17 @@ function parseWb(wb){
       if(isNaN(syncRate)) syncRate=0;
       if(syncRate>1) syncRate=syncRate/100;
       d.monthSyncStats.push({month:monthName,syncCount,syncRate});
+    }
+
+    // ✅ الإصلاح الجوهري:
+    // الجدول الشهري يعطي قيم خاطئة للشهر المختار بسبب خلل التواريخ
+    // نستبدل قيمه بالقيم الصحيحة من B9 وB10 مباشرة
+    if(selectedMonth && d.syncRateMonthly != null){
+      const idx = d.monthSyncStats.findIndex(m=>m.month===selectedMonth);
+      if(idx>=0){
+        d.monthSyncStats[idx].syncRate  = d.syncRateMonthly;
+        d.monthSyncStats[idx].syncCount = d.syncCountMonthly||0;
+      }
     }
 
     // نسبة التزامن السنوية = متوسط الأشهر التي فيها بيانات
