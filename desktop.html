@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -342,7 +343,7 @@ function normalizeLatestData(val){
   const storedSync = toArray12(val.monthSyncStats);
   for(let i=0;i<12;i++){
     const st = out.monthStats[i] || {};
-    const sy = out.monthSyncStats[i] || storedSync[i] || {};
+    const sy = storedSync[i] || out.monthSyncStats[i] || {};
     const received = Number(st.received || 0);
     out.monthStats[i] = {
       month: MONTHS[i], idx: i, total: Number(st.total || total),
@@ -685,9 +686,14 @@ function procFile2(file){
         fileName:file.name,
         fileSize:file.size,
         uploadTime:t,
-        activeMonth:(()=>{for(let i=11;i>=0;i--){if(D2.monthStats[i]&&D2.monthStats[i].received>0)return i;}return 0;})(),
+        activeMonth:D2.activeMonth,
         municipalities:D2.municipalities.length,
-        uploadedBy:'المدير'
+        uploadedBy:'المدير',
+        selectedMonth:D2.selectedMonth,
+        syncRateMonthly:D2.syncRateMonthly,
+        syncRateAnnual:D2.syncRateAnnual,
+        syncCountMonthly:D2.syncCountMonthly,
+        monthSyncStats:D2.monthSyncStats
       }).then(()=>{
         db.ref('tatveem/notification').set({
           title:'💉 تحديث جديد — لوحة التطعيم',
@@ -723,10 +729,44 @@ function parseWbLocal(wb){
     const col=1+mi*2;let recv=0;const missList=[];
     d.trackRows.forEach(r=>{
       const v=String(r[col]||'').trim();
-      if(v==='تم'||v==='✓')recv++;else missList.push(String(r[0]).trim());
+      if(['تم','✓','✔','نعم','مستلم'].includes(v))recv++;else missList.push(String(r[0]).trim());
     });
     return{month:mn,idx:mi,total,received:recv,notReceived:total-recv,rate:total>0?recv/total:0,missList};
   });
+  d.monthSyncStats=MONTHS.map((mn,mi)=>({month:mn,syncCount:0,syncRate:0}));
+  d.selectedMonth='';
+  const wsDash=wb.Sheets['Dashboard'];
+  if(wsDash){
+    const b3=wsDash['B3'];
+    if(b3)d.selectedMonth=String(b3.v||'').trim();
+    function normMonth(v){return String(v||'').replace(/[\u064B-\u065F\u0670]/g,'').replace(/\s+/g,'').trim();}
+    function toNum(v){if(v==null||v==='')return 0;if(typeof v==='number')return isFinite(v)?v:0;let s=String(v).trim().replace('%','').replace(/,/g,'.');let n=parseFloat(s);if(!isFinite(n))return 0;return n>1?n/100:n;}
+    function cell(r,c){const x=wsDash[XLSX.utils.encode_cell({r:r,c:c})];return x?x.v:null;}
+    const range=XLSX.utils.decode_range(wsDash['!ref']||'A1:E40');
+    let header=-1;
+    for(let r=range.s.r;r<=range.e.r;r++){if(normMonth(cell(r,0))==='الشهر'){header=r;break;}}
+    if(header>=0){
+      for(let r=header+1;r<=Math.min(header+12,range.e.r);r++){
+        const idx=MONTHS.findIndex(m=>normMonth(m)===normMonth(cell(r,0)));
+        if(idx<0)continue;
+        const received=Math.round(toNum(cell(r,1))*(String(cell(r,1)).includes('%')?total:1));
+        const integRate=toNum(cell(r,2));
+        const syncCount=Math.round(toNum(cell(r,3))*(String(cell(r,3)).includes('%')?total:1));
+        const syncRate=toNum(cell(r,4));
+        d.monthStats[idx].received=received;
+        d.monthStats[idx].notReceived=Math.max(0,total-received);
+        d.monthStats[idx].rate=integRate;
+        d.monthSyncStats[idx]={month:MONTHS[idx],syncCount,syncRate};
+      }
+    }
+  }
+  let selIdx=MONTHS.indexOf(String(d.selectedMonth||'').trim());
+  if(selIdx<0||!d.monthStats[selIdx]||d.monthStats[selIdx].received===0){selIdx=-1;for(let i=11;i>=0;i--){if(d.monthStats[i].received>0){selIdx=i;break;}}if(selIdx<0)selIdx=0;d.selectedMonth=MONTHS[selIdx];}
+  d.activeMonth=selIdx;
+  d.syncRateMonthly=d.monthSyncStats[selIdx]?d.monthSyncStats[selIdx].syncRate:0;
+  d.syncCountMonthly=d.monthSyncStats[selIdx]?d.monthSyncStats[selIdx].syncCount:0;
+  const monthsWithData=d.monthStats.map((m,i)=>m.received>0?d.monthSyncStats[i]:null).filter(Boolean);
+  d.syncRateAnnual=monthsWithData.length?monthsWithData.reduce((a,m)=>a+Number(m.syncRate||0),0)/monthsWithData.length:0;
   const wsH=wb.Sheets['الخريطة الحرارية'];
   const rawH=wsH?XLSX.utils.sheet_to_json(wsH,{header:1,defval:''}):[];
   d.hmRows=rawH.slice(3).filter(r=>r[0]&&String(r[0]).trim()).map(r=>({
